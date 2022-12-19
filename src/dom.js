@@ -55,23 +55,24 @@ function priorityInput(arr){
     arr.push(input);
     return input
 }
-function close (){
+function close (arr){
     const btnClose = document.createElement('button');
     btnClose.textContent = 'Close'
+    arr.push(btnClose);
     return btnClose
 
 }
 
-function btnSubmit (){
+function btnAdd (arr){
     const btn = document.createElement('button')
-    btn.type = 'submit'
     btn.textContent = 'Add task'
+    arr.push(btn);
     return btn
 }
 function removeElement (e){
     const container = document.querySelector('.card-container');
     if (e.textContent === undefined){
-        const card = this.parentElement.parentElement
+        const card = this.parentElement
         container.removeChild(card)
     }
     else {
@@ -79,11 +80,10 @@ function removeElement (e){
         parent.removeChild(e)
     }
     
-
     showEl(document.querySelector('.add-task'))
 }
 
-function domEvents (btn){
+/* function domEvents (btn){
     if (btn.textContent == 'Close'){
         btn.addEventListener('click',removeElement)
     }
@@ -92,27 +92,18 @@ function domEvents (btn){
     }
 }
 function addtsk (){
-    const form = this.parentElement
-    const card = form.parentElement
-    domCard(form,card)
-    removeElement(form)
+    const card = this.parentElement
+    if (card.children[0].value.length > 1){
+        console.log(card.children[0].value)
+    }
 }
+ */
 function simple_el (type,selector_name,innerContent){
     const ell = document.createElement(type);
     ell.className = selector_name;
     ell.textContent = innerContent;
     return ell
   }
-  function domCard (form,parent){
-    
-    const today = simple_el('h2','today-date','TODAY DATE')
-    const title = simple_el('h3','title',form[0].value)
-    const description = simple_el('h4','description',form[1].value)
-    const dueDate = simple_el('h4', 'dueDate',form[2].value)
-    const priority = simple_el('h4', 'priority', form[3].value)
-    let arr = [today,title,description,dueDate,priority]
-    arr.forEach(html => parent.appendChild(html))
-}
 
 
 function showEl (el){
@@ -123,44 +114,25 @@ function hideEl (el){
     el.setAttribute('style','display: none;')
 }
 
-function createForm(){
-    /* all elements created goes here to append all together  */
-    const allElements = []
+function cardTemplate(){
     const card = document.createElement('div');
     card.className = 'card'
-    
+
     const container = document.querySelector('.card-container')
-
-    function domForm(){
-        const title = txtInput ('Title',allElements)
-        const description = txtInput ('Description',allElements)
-        const dueDate = dateInput (allElements)
-        const priority = priorityInput(allElements)
-        const btnClose = close()
-        const btnAddTask = btnSubmit()
-        allElements.forEach(obj => form.appendChild(obj))
-        domEvents(btnClose)
-        domEvents(btnAddTask)
-        
-        
-    }
-
-    function addForm(){
-        card.appendChild(form)
-        container.appendChild(card)
-        
-    }
-    function formContentObj(form){
-        const obj = 
-        {'title':form[0].value,
-        'description':form[1].value,
-        'dueDate':form[2].value,
-        'priority':form[3].value}
-        return obj
-    }
-   
-    return {addForm,formContentObj,form,domForm}
+    const allElements = []
+    const title = txtInput ('Title',allElements)
+    const description = txtInput ('Description',allElements)
+    const dueDate = dateInput (allElements)
+    const priority = priorityInput(allElements)
+    const btnClose = close(allElements)
+    const btnAddTask = btnAdd(allElements)
+    
+    allElements.forEach(obj => card.appendChild(obj))
+    container.appendChild(card)
+    let just_input = allElements.filter(word => word.localName == 'input'|| word.localName == 'select');
+    let obj = {}
+    just_input.forEach(input => obj[input.id] = input)
+    return obj
     
 }
 
-export default createForm
