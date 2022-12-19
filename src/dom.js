@@ -55,9 +55,10 @@ function priorityInput(arr){
     arr.push(input);
     return input
 }
-function close (arr){
+function btn_close (arr){
     const btnClose = document.createElement('button');
     btnClose.textContent = 'Close'
+    btnClose.setAttribute('id','close')
     arr.push(btnClose);
     return btnClose
 
@@ -66,6 +67,7 @@ function close (arr){
 function btnAdd (arr){
     const btn = document.createElement('button')
     btn.textContent = 'Add task'
+    btn.setAttribute('id','add-card')
     arr.push(btn);
     return btn
 }
@@ -74,16 +76,16 @@ function removeElement (e){
     if (e.textContent === undefined){
         const card = this.parentElement
         container.removeChild(card)
+        /* hideEl(card) */
     }
     else {
         const parent = e.parentElement
+        /* hideEl(parent) */
         parent.removeChild(e)
     }
-    
-    showEl(document.querySelector('.add-task'))
 }
 
-/* function domEvents (btn){
+ function domEvents (btn){
     if (btn.textContent == 'Close'){
         btn.addEventListener('click',removeElement)
     }
@@ -91,13 +93,28 @@ function removeElement (e){
         btn.addEventListener('click',addtsk)
     }
 }
+
 function addtsk (){
     const card = this.parentElement
     if (card.children[0].value.length > 1){
-        console.log(card.children[0].value)
+        domCard (card.children,card)
     }
 }
- */
+function domCard (elChildren,parent){
+    const container = document.querySelector('.card-container')
+    const card = document.createElement('div');
+    card.className = 'card'
+
+    const today = simple_el('h2','today-date','TODAY DATE')
+    const title = simple_el('h3','title',elChildren[0].value)
+    const description = simple_el('h4','description',elChildren[1].value)
+    const dueDate = simple_el('h4', 'dueDate',elChildren[2].value)
+    const priority = simple_el('h4', 'priority', elChildren[3].value)
+    let arr = [today,title,description,dueDate,priority]
+    removeElement(parent)
+    arr.forEach(html => card.appendChild(html))
+    container.appendChild(card)
+}
 function simple_el (type,selector_name,innerContent){
     const ell = document.createElement(type);
     ell.className = selector_name;
@@ -124,15 +141,21 @@ function cardTemplate(){
     const description = txtInput ('Description',allElements)
     const dueDate = dateInput (allElements)
     const priority = priorityInput(allElements)
-    const btnClose = close(allElements)
+    const btnClose = btn_close(allElements)
     const btnAddTask = btnAdd(allElements)
-    
     allElements.forEach(obj => card.appendChild(obj))
     container.appendChild(card)
-    let just_input = allElements.filter(word => word.localName == 'input'|| word.localName == 'select');
+    domEvents(btnClose)
+    domEvents(btnAddTask)   
+/*     let just_input = allElements.filter(word => word.localName != 'label');
     let obj = {}
-    just_input.forEach(input => obj[input.id] = input)
-    return obj
-    
+    just_input.forEach(input => obj[input.id] = input) */   
 }
+function callCard (){
+    
+    const addTask = document.querySelector('.add-task');
+    addTask.addEventListener('click',cardTemplate)
+   
 
+}
+export default callCard 

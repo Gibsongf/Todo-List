@@ -44,7 +44,7 @@ ul {
     height: 100%;
     font-size: 1.3rem;
     display: grid;
-    grid-template-rows: 200px 1fr 1fr;
+    
 }
 
 .side-bar > div:hover,.side-bar > ul > li:hover {
@@ -57,11 +57,6 @@ ul {
 
 
 
-.projects {
-    grid-row: 6;
-    
-
-}
 .card-container {
     padding: 100px;
     display: grid;
@@ -70,7 +65,6 @@ ul {
 }
 .card {
     border: solid black 5px;
-
 }
 
 
