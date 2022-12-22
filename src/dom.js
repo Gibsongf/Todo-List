@@ -74,6 +74,8 @@ function removeElement(e) {
     const parent = e.parentElement;
     parent.removeChild(e);
   }
+  showBtnTask();
+
 }
 
 function domEvents(btn) {
@@ -83,13 +85,16 @@ function domEvents(btn) {
   if (btn.textContent == "Add task") {
     btn.addEventListener("click", addtsk);
   }
+
 }
 
 function addtsk() {
   const card = this.parentElement;
   if (card.children[0].value.length > 1) {
     domCard(card.children, card);
+    showBtnTask();
   }
+  
 }
 function toObj(lst) {
   let obj = {};
@@ -119,8 +124,8 @@ function domCard(elChildren, parent) {
   });
   removeElement(parent);
   container.appendChild(card);
-  showBtnTask();
 }
+
 function simple_el(type, selector_name, innerContent) {
   const ell = document.createElement(type);
   ell.className = selector_name;
@@ -128,17 +133,9 @@ function simple_el(type, selector_name, innerContent) {
   return ell;
 }
 
-function showBtnTask() {
-  const addTask = document.querySelector(".add-task");
-  addTask.setAttribute("style", "display: block;");
-}
 
-function hideBtnTask() {
-  const addTask = document.querySelector(".add-task");
-  addTask.setAttribute("style", "display: none;");
-}
 
-function cardTemplate() {
+function inputCard() {
   const card = document.createElement("div");
   card.className = "card";
   const container = document.querySelector(".card-container");
@@ -150,18 +147,20 @@ function cardTemplate() {
   const priority = priorityInput(allElements);
   const btnClose = btn_close(allElements);
   const btnAddTask = btnAdd(allElements);
-  allElements.forEach((obj) => card.appendChild(obj));
+  allElements.forEach( obj => card.appendChild(obj));
   container.appendChild(card);
   domEvents(btnClose);
   domEvents(btnAddTask);
 
 }
-function callCard() {
-  let input_open = false;
+function showBtnTask() {
   const addTask = document.querySelector(".add-task");
-  addTask.addEventListener("click", () => {
-    cardTemplate();
-    hideBtnTask();
-  });
+  addTask.setAttribute("style", "display: block;");
 }
-export default callCard;
+
+function hideBtnTask() {
+  const addTask = document.querySelector(".add-task");
+  addTask.setAttribute("style", "display: none;");
+}
+
+export {inputCard,domCard,hideBtnTask}
