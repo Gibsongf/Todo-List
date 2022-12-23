@@ -1,70 +1,8 @@
 import "./style.css";
+import createEl from "/src/createEl.js";
 
-function htmlLabel(contentName) {
-  const label = document.createElement("label");
-  label.textContent = contentName + ":";
-  label.setAttribute("id", contentName.toLowerCase());
-  label.htmlFor = contentName.toLowerCase();
-  return label;
-}
-function txtInput(txt, arr) {
-  const input = document.createElement("input");
-  input.type = "text";
-  input.placeholder = txt;
-  if (txt == "Title") {
-    input.required = true;
-  }
-  input.setAttribute("id", txt);
-  arr.push(input);
-  return input;
-}
-function dateInput(arr) {
-  const label = htmlLabel("dueDate");
-  const input = document.createElement("input");
-  input.type = "date";
-  input.setAttribute("id", "dueDate");
-  input.min = "2023-01-01"; /* Here we use api to use today date */
+const create = createEl();
 
-  arr.push(label);
-  arr.push(input);
-
-  return input;
-}
-function selectOption(optValue, select) {
-  const opt = document.createElement("option");
-  opt.value = optValue.toLowerCase();
-  opt.textContent = optValue;
-  select.appendChild(opt);
-  return opt;
-}
-function priorityInput(arr) {
-  const label = htmlLabel("Priority");
-  const input = document.createElement("select");
-  input.setAttribute("id", "priority");
-
-  selectOption("High", input);
-  selectOption("Mid", input);
-  selectOption("Low", input);
-
-  arr.push(label);
-  arr.push(input);
-  return input;
-}
-function btn_close(arr) {
-  const btnClose = document.createElement("button");
-  btnClose.textContent = "Close";
-  btnClose.setAttribute("id", "close");
-  arr.push(btnClose);
-  return btnClose;
-}
-
-function btnAdd(arr) {
-  const btn = document.createElement("button");
-  btn.textContent = "Add task";
-  btn.setAttribute("id", "add-card");
-  arr.push(btn);
-  return btn;
-}
 function removeElement(e) {
   const container = document.querySelector(".card-container");
   if (e.textContent === undefined) {
@@ -75,7 +13,6 @@ function removeElement(e) {
     parent.removeChild(e);
   }
   showBtnTask();
-
 }
 
 function domEvents(btn) {
@@ -83,18 +20,16 @@ function domEvents(btn) {
     btn.addEventListener("click", removeElement);
   }
   if (btn.textContent == "Add task") {
-    btn.addEventListener("click", addtsk);
+    btn.addEventListener("click", addCard);
   }
-
 }
 
-function addtsk() {
+function addCard() {
   const card = this.parentElement;
   if (card.children[0].value.length > 1) {
     domCard(card.children, card);
     showBtnTask();
   }
-  
 }
 function toObj(lst) {
   let obj = {};
@@ -111,11 +46,11 @@ function domCard(elChildren, parent) {
   card.className = "card";
   let all_el = toObj(elChildren);
   const els_info = [
-    ["h2", "today-date", "TODAY DATE"],
-    ["h3", "title", all_el["Title"]],
-    ["h4", "description", all_el["Description"]],
-    ["h4", "dueDate", all_el["dueDate"]],
-    ["h4", "priority", all_el["Priority"]],
+    ["h1", "title", all_el["Title"]],
+    ["h3", "dueDate", all_el["dueDate"]],
+    ["h3", "description", all_el["Description"]],
+    /* here a function that change the card color with the priority selected */
+    ["h3", "priority", all_el["priority"]],
   ];
 
   els_info.forEach((item) => {
@@ -133,25 +68,28 @@ function simple_el(type, selector_name, innerContent) {
   return ell;
 }
 
+function createInputEls() {
+  const allElements = [];
+  
+  create.txtInput("Title", allElements);
+  create.txtInput("Description", allElements);
+  create.dateInput(allElements);
+  create.priorityInput(allElements);
 
+  const btnClose = create.btn_close(allElements);
+  const btnAddTask = create.btnAdd(allElements);
+  return {allElements,btnClose,btnAddTask};
+}
 
 function inputCard() {
   const card = document.createElement("div");
   card.className = "card";
   const container = document.querySelector(".card-container");
-
-  const allElements = [];
-  const title = txtInput("Title", allElements);
-  const description = txtInput("Description", allElements);
-  const dueDate = dateInput(allElements);
-  const priority = priorityInput(allElements);
-  const btnClose = btn_close(allElements);
-  const btnAddTask = btnAdd(allElements);
-  allElements.forEach( obj => card.appendChild(obj));
+  const inputs = createInputEls();
+  inputs.allElements.forEach((obj) => card.appendChild(obj));
   container.appendChild(card);
-  domEvents(btnClose);
-  domEvents(btnAddTask);
-
+  domEvents(inputs.btnClose);
+  domEvents(inputs.btnAddTask);
 }
 function showBtnTask() {
   const addTask = document.querySelector(".add-task");
@@ -163,4 +101,4 @@ function hideBtnTask() {
   addTask.setAttribute("style", "display: none;");
 }
 
-export {inputCard,domCard,hideBtnTask}
+export { inputCard, domCard, hideBtnTask };

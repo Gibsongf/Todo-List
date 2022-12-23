@@ -1,9 +1,4 @@
-body{
-    margin: 0;
-    padding: 0;
-}
 
-/*  */
 * {
     margin: 0;
     padding: 0;
@@ -14,17 +9,8 @@ body{
 body {
     background-color: #DFE6EE;
 }
-.side-bar > h3 {
-    font-size: 1.7rem;
-    grid-column: 2;
-    display: flex;
-    align-self: center;
-}
 
-.dashboard-img{
-    display: flex;
-    align-self: center;
-}
+
 ul {
     list-style-type: none;
 
@@ -41,20 +27,26 @@ ul {
     font-weight: bold;
     color: white;
     background-color: #1B8ECC;
-    height: 100%;
     font-size: 1.3rem;
+    height: 920px;
     display: grid;
-    
+    grid-template-rows: repeat(auto-fill , minmax(60px,1fr));
+
 }
 
-.side-bar > div:hover,.side-bar > ul > li:hover {
+.side-bar > div:hover,.side-bar > ul > li:hover,#selected {
     background-color: #0e5d88;
 }
-
+.side-bar > ul{
+    grid-row: 5;
+}
 .user-name {
-    grid-row: 1;
+    grid-row: 3;
 }
 
+.projects {
+    grid-row: 8
+}
 
 
 .card-container {
@@ -65,6 +57,7 @@ ul {
 }
 .card {
     border: solid black 5px;
+    height: 250px;
 }
 
 
