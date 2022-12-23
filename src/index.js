@@ -8,7 +8,7 @@ function callCard() {
     hideBtnTask();
   });
 }
-/* Make a function that retrieve all task and separate by date */
+/* Make a function that retrieve all task and separate by date or title */
 /* and create a new module that will use it in conjunction of the side-bar click event */
 function allTask (){
     const container_task = document.querySelectorAll('.card')/* and search local storage use api */
@@ -21,17 +21,15 @@ function allTask (){
           content[i.className] = i.textContent
           /* console.log(content) */
         }
-        console.log('-------------------------')
+       /*  console.log('-------------------------') */
         all[task.children[1].textContent] = content
     })
-    console.log(all)
-
+/*     console.log(all)
+ */
     
     return all
 }
-/* function will see the due date and 
-if the date is more than 7 days just put the date (30 dez) 
-else just the day of the week  */
+
 callCard()
 const all = allTask()
 const today = document.querySelector('.today')
@@ -40,10 +38,7 @@ const nxt_seven_days = document.querySelector('.seven-days')
 const all_task = document.querySelector(".all-tasks")
 const ul = document.querySelector('ul')
 /* const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]; */
-const {format} = require('date-fns');
-const result = format(new Date(), 'MM/dd/yyyy, EEEE')
 
-console.log(result)
 
 /* let test = [] */
 /* all task save to storage as obj that get returned as obj using JSON Module

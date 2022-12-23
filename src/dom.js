@@ -1,8 +1,10 @@
 import "./style.css";
-import createEl from "/src/createEl.js";
+import createEl from "/src/createElements.js";
+import dDate from "/src/date-mod.js";
+
 
 const create = createEl();
-
+const checkDate = dDate()
 function removeElement(e) {
   const container = document.querySelector(".card-container");
   if (e.textContent === undefined) {
@@ -40,11 +42,17 @@ function toObj(lst) {
   }
   return obj;
 }
+
 function domCard(elChildren, parent) {
   const container = document.querySelector(".card-container");
   const card = document.createElement("div");
   card.className = "card";
   let all_el = toObj(elChildren);
+  if (all_el['dueDate'].length > 1){
+    console.log(all_el['dueDate'])
+    const newDate = checkDate.checkDistance(all_el['dueDate'])
+    all_el['dueDate'] = newDate;
+  }
   const els_info = [
     ["h1", "title", all_el["Title"]],
     ["h3", "dueDate", all_el["dueDate"]],
@@ -70,7 +78,7 @@ function simple_el(type, selector_name, innerContent) {
 
 function createInputEls() {
   const allElements = [];
-  
+
   create.txtInput("Title", allElements);
   create.txtInput("Description", allElements);
   create.dateInput(allElements);
