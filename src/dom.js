@@ -49,8 +49,12 @@ function domCard(elChildren, parent) {
   card.className = "card";
   let all_el = toObj(elChildren);
   if (all_el['dueDate'].length > 1){
-    console.log(all_el['dueDate'])
+
     const newDate = checkDate.checkDistance(all_el['dueDate'])
+    all_el['dueDate'] = newDate;
+  }
+  else { 
+    const newDate = checkDate.todayDate()
     all_el['dueDate'] = newDate;
   }
   const els_info = [
