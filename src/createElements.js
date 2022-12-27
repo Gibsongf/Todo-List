@@ -29,7 +29,7 @@ function createEl() {
     const input = document.createElement("input");
     input.type = "text";
     input.placeholder = txt;
-    if (txt == "Title") {
+    if (txt == "title") {
       input.required = true;
     }
 

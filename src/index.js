@@ -15,10 +15,9 @@ function callCard() {
 
 callCard();
 const today = document.querySelector(".today");
-today.setAttribute("id", "selected");
 const nxt_seven_days = document.querySelector(".seven-days");
 const all_task = document.querySelector(".all-tasks");
-const ul = document.querySelector("ul");
+all_task.setAttribute("id", "selected");
 
 function allTask() {
   const container_task =
@@ -42,7 +41,7 @@ let allObjTasks = [];
 /* func that store the task after the add task btn is clicked 
 with the actual date instead of day of the week */
 /* all task save to storage as obj that get returned as obj using JSON Module */
-for (let i of Object.keys(all)) {
+/* for (let i of Object.keys(all)) {
   sessionStorage[i] = JSON.stringify(all[i]);
   let obj = sessionStorage.getItem(i);
   allObjTasks.push(JSON.parse(obj));
@@ -52,4 +51,4 @@ for (let i of Object.keys(sessionStorage)) {
   if (i != 'IsThisFirstTime_Log_From_LiveServer'){
     console.log(i, sessionStorage[i],sessionStorage.length);
   }
-}
+} */

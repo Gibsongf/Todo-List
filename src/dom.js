@@ -2,9 +2,8 @@ import "./style.css";
 import createEl from "/src/createElements.js";
 import dDate from "/src/date-mod.js";
 
-
 const create = createEl();
-const checkDate = dDate()
+const checkDate = dDate();
 function removeElement(e) {
   const container = document.querySelector(".card-container");
   if (e.textContent === undefined) {
@@ -33,34 +32,46 @@ function addCard() {
     showBtnTask();
   }
 }
-function toObj(lst) {
+
+function store_changeDate(lst) {
   let obj = {};
-  for (let i of lst) {
-    if (i.localName != "label") {
-      obj[i.id] = i.value;
+  let arr = Array.from(lst).filter(unnecessaryEls);
+  arr.forEach((item) => (obj[item.id] = item.value));
+
+  function unnecessaryEls(el) {
+    if (el.localName != "label" && el.localName != "button") {
+      if (el.id == "dueDate" || el.value.length > 1) {
+        return el;
+      }
     }
   }
+
+  function storeTask() {
+    if (obj["dueDate"].length > 1) {
+      sessionStorage[sessionStorage.length] = JSON.stringify(obj);
+      obj["dueDate"] = checkDate.checkDistance(obj["dueDate"]);
+    } else {
+      obj["dueDate"] = checkDate.todayDate();
+      sessionStorage[sessionStorage.length] = JSON.stringify(obj);
+    }
+  }
+  storeTask();
+
   return obj;
 }
-
+/* put store_changedata in date-store-mod and there 
+we will store and after data format the date info for use it in the page */
 function domCard(elChildren, parent) {
   const container = document.querySelector(".card-container");
   const card = document.createElement("div");
   card.className = "card";
-  let all_el = toObj(elChildren);
-  if (all_el['dueDate'].length > 1){
-
-    const newDate = checkDate.checkDistance(all_el['dueDate'])
-    all_el['dueDate'] = newDate;
-  }
-  else { 
-    const newDate = checkDate.todayDate()
-    all_el['dueDate'] = newDate;
-  }
+  let all_el = store_changeDate(elChildren);
+  console.log(all_el);
+  console.log(sessionStorage);
   const els_info = [
-    ["h1", "title", all_el["Title"]],
+    ["h1", "title", all_el["title"]],
     ["h3", "dueDate", all_el["dueDate"]],
-    ["h3", "description", all_el["Description"]],
+    ["h3", "description", all_el["description"]],
     /* here a function that change the card color with the priority selected */
     ["h3", "priority", all_el["priority"]],
   ];
@@ -83,14 +94,14 @@ function simple_el(type, selector_name, innerContent) {
 function createInputEls() {
   const allElements = [];
 
-  create.txtInput("Title", allElements);
-  create.txtInput("Description", allElements);
+  create.txtInput("title", allElements);
+  create.txtInput("description", allElements);
   create.dateInput(allElements);
   create.priorityInput(allElements);
 
   const btnClose = create.btn_close(allElements);
   const btnAddTask = create.btnAdd(allElements);
-  return {allElements,btnClose,btnAddTask};
+  return { allElements, btnClose, btnAddTask };
 }
 
 function inputCard() {
