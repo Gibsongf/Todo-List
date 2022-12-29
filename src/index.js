@@ -1,6 +1,6 @@
 import "./style.css";
 import { inputCard, domCard, hideBtnTask } from "/src/dom.js";
-
+/* sessionStorage.clear() */
 function callCard() {
   const addTask = document.querySelector(".add-task");
   addTask.addEventListener("click", () => {
@@ -39,7 +39,7 @@ const all = allTask();
 let allObjTasks = [];
 let selected_el = document.getElementById('selected')
 /* console.log(selected_el) */
-console.log(Object.keys(sessionStorage))
+/* console.log(Object.keys(sessionStorage)) */
 
 for (let i of Object.keys(sessionStorage)) {
   if (i !="IsThisFirstTime_Log_From_LiveServer" && i != 'objKey'){
@@ -47,7 +47,7 @@ for (let i of Object.keys(sessionStorage)) {
     allObjTasks.push(JSON.parse(obj));
   }
 }
-console.log(allObjTasks,sessionStorage)
+/* console.log(allObjTasks,sessionStorage) */
 allObjTasks.forEach(item => domCard(item))/* all task in the page */
 
 /* func that store the task after the add task btn is clicked 

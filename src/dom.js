@@ -1,9 +1,8 @@
 import "./style.css";
 import createEl from "/src/createElements.js";
-import dDate from "/src/date-mod.js";
+import {storeContent_changeDate} from "/src/date-mod.js";
 
 const create = createEl();
-const checkDate = dDate();
 
 function removeStorageItem() {
   const itemKey = this.parentElement.className.replace("card-", "");
@@ -42,59 +41,12 @@ function addCard() {
     showBtnTask();
   }
 }
-function elementToObj(elem) {
-  let obj = {};
-  let arr = Array.from(elem).filter(unnecessaryEls);
-  arr.forEach((item) => (obj[item.id] = item.value));
-
-  function unnecessaryEls(el) {
-    if (el.localName != "label" && el.localName != "button") {
-      if (el.id == "dueDate" || el.value.length > 1) {
-        return el;
-      }
-    }
-  }
-  return obj;
-}
-function store_changeDate(lst) {
-  let obj = elementToObj(lst);
-  function storeTask(contentObj, storeContent) {
-    function keyStorage() {
-      let newKeyNumber = sessionStorage.getItem("objKey");
-      if (typeof newKeyNumber != "string") {
-        sessionStorage.setItem("objKey", 0);
-      } else {
-        sessionStorage.setItem("objKey", ++newKeyNumber);
-      }
-      obj["storageKey"] = sessionStorage["objKey"];
-      sessionStorage[sessionStorage["objKey"]] = JSON.stringify(contentObj);
-    }
-
-    if (contentObj["dueDate"].length > 1) {
-      if (storeContent == true) {
-        keyStorage();
-      }
-      contentObj["dueDate"] = checkDate.checkDistance(contentObj["dueDate"]);
-    } else {
-      contentObj["dueDate"] = checkDate.todayDate();
-      if (storeContent == true) {
-        keyStorage();
-      }
-    }
-  }
-  if (obj["title"] == undefined) {
-    storeTask(lst);
-    return lst;
-  }
-  storeTask(obj, true);
-  return obj;
-}
 
 function domCard(elChildren) {
   const card_input = document.querySelector(".card-input");
   const container = document.querySelector(".card-container");
   const card = document.createElement("div");
-  let all_el = store_changeDate(elChildren);
+  let all_el = storeContent_changeDate(elChildren);
   card.className = "card-" + all_el["storageKey"];
 
   const els_info = [

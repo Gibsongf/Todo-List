@@ -1,184 +1,108 @@
-function date_or_weekday() {
-  const {
-    format,
-    parseISO,
-    formatDistanceToNowStrict,
-    intlFormat,
-    addDays,
-    isBefore
-  } = require("date-fns");
+const { format, parseISO, addDays, isBefore } = require("date-fns");
 
-  function addDays_currentDate(distance, currentDate) {
-    const currentDay = format(new Date(), "yyyy-MM-dd");
-    let intDistance = Number(distance.split(" ")[0]);
-    const distanceName = distance.split(" ")[1];
-    /* console.log(`Distance${distance}, Current Date:${currentDate}`) */
-    if (currentDate == currentDay) {
-      /* console.log(currentDate, currentDate == currentDay, currentDay); */
-      return true;
-    }
-
-    if (distanceName == "hours") {
-      intDistance = 1;
-      let nextWeekDay = "Tomorrow";
-      return { weekDayName: nextWeekDay, intDistance };
-    }
-
-    if (distanceName == "day" || distanceName == "days") {
-      intDistance += 1;
-    }
-
-    const date_number = addDays(parseISO(currentDay), intDistance);
-    const fDate = intlFormat(date_number, {
-      year: "numeric",
-      month: "numeric",
-      day: "numeric",
-      weekday: "long",
-    });
-    let weekDayName = fDate.split(",")[0];
-    const nextDate = fDate.split(",")[1].trim();
-
-    return { weekDayName, nextDate, intDistance, currentDay };
+function setMinDate(userDate) {
+  /*     console.log(`task date :${userDate} || current day ${todayDate()}`)
+   */ const result = isBefore(parseISO(userDate), parseISO(todayDate()));
+  /* console.log(userDate,todayDate(),result,userDate) */
+  if (result == true) {
+    return todayDate();
   }
-  function setMinDate(userDate){
-/*     console.log(`task date :${userDate} || current day ${todayDate()}`)
- */ const result = isBefore(parseISO(userDate), parseISO(todayDate()))
-    /* console.log(userDate,todayDate(),result,userDate) */
-    if (result==true){
-      return todayDate()
-    }
-    if(result==false){
-      return userDate
-    }
+  if (result == false) {
+    return userDate;
   }
-  
-  /* return the actual date to store and the date to show in the page */
-  function checkDistance(taskDate) {
-
-    taskDate = setMinDate(taskDate)
-    if (typeof taskDate == 'undefined'){
-      taskDate = todayDate()
-    }
-    const distance = formatDistanceToNowStrict(new Date(taskDate));
-    let distanceName = distance.split(' ')
-    let formateDate = '';
-    /* console.log(`Task Date ${taskDate}, Distance: ${distance}  `) */
-    if (distanceName[1] == 'month' || distanceName[1] == 'months'){
-      return taskDate
-    }
-    if (distanceName[1] == 'days' && Number(distanceName[0] > 7 )){
-      return taskDate
-    }
-    else {
-      formateDate = addDays_currentDate(distance, taskDate);
-      if (formateDate == true) {
-        return "Today";
-      }
-
-      if (formateDate.intDistance == 7) {
-        return "Next " + formateDate.weekDayName;
-      }
-      if (formateDate.intDistance > 7) {
-        return formateDate.nextDate;
-      }
-      if (formateDate.intDistance < 7) {
-        /* console.log("week day name", taskDate); */
-        return formateDate.weekDayName;
-      }
-      
-    }
-  }
-  function todayDate(a) {
-    /* console.log(typeof a) */
-    const currentDay = format(new Date(), "yyyy-MM-dd");
-    return currentDay;
-  }
-  return { checkDistance, todayDate };
 }
-export default date_or_weekday;
-
-/* let test = date_or_weekday()
-console.log(test.checkDistance('2022-12-26')) */
-
-function storageManage() {
-
-  function store_changeData(lst) {
-    let obj = {};
-    console.log(typeof lst)
-    function emptyDate (date){
-      if (date.length > 1) {
-        const newDate = checkDate.checkDistance(date);
-        return newDate
-        
-      } 
-      else {
-        const newDate = checkDate.todayDate();
-        return newDate  
-      }
-      
-    }
-    
-    for (let i of lst) {
-      if (i.localName != "label") {
-          /* console.log(`id:${i.id}, value:${i.value.length}`); */
-          obj[i.id] = i.value;
-        }
-      }
-    
-    /* Remove empty values */
-    for (let i of Object.keys(obj)) {
-      if (obj[i].length < 1) {
-        delete obj[i];
-      }
-    }
-    console.log(obj['dueDate'])
+function objNext7Days(){
+  let days = [0, 1, 2, 3, 4, 5, 6, 7];
+  let currentDay = todayDate();
+  let dateDict = {};
   
-    /* sessionStorage[sessionStorage.length] = JSON.stringify(obj); */
-    obj['dueDate'] = emptyDate(obj['dueDate'])
-    console.log(obj['dueDate'])
-    return obj;
-  }
-
-  
-  function storeOneTask (){
-    sessionStorage[sessionStorage.length] = JSON.stringify(obj);
-    console.log(sessionStorage)
-  }
-  const all = allTask();
-  let allObjTasks = [];
-  /* func that store the task after the add task btn is clicked 
-  with the actual date instead of day of the week */
-  /* all task save to storage as obj that get returned as obj using JSON Module */
-  for (let i of Object.keys(all)) {
-    sessionStorage[i] = JSON.stringify(all[i]);
-    let obj = sessionStorage.getItem(i);
-    allObjTasks.push(JSON.parse(obj));
-  }
-
-  for (let i of Object.keys(sessionStorage)) {
-    if (i != "IsThisFirstTime_Log_From_LiveServer") {
-      console.log(i, sessionStorage[i], sessionStorage.length);
+  for (let n of days) {
+    let ad = addDays(parseISO(currentDay), n);
+    let arr_date = format(new Date(ad), "yyyy-MM-dd EEEE").split(" ");
+    if (n == 7) {
+      dateDict[arr_date[0]] = "Next " + arr_date[1];
+    } else {
+      dateDict[arr_date[0]] = arr_date[1];
     }
   }
-  
+  let weekDays = Object.keys(dateDict);
+  dateDict[weekDays[0]] = "Today";
+  dateDict[weekDays[1]] = "Tomorrow";
+  /* console.log(dateDict, !weekDays.includes(taskDate)); */
+  return {dateDict,weekDays}
 }
 
-/* 
-function allTask() {
-  const container_task =
-    document.querySelectorAll(".card"); and search local storage use api
-  let all = {};
-  let count = 1;
-  container_task.forEach(task => all[task.children[0].textContent] = task.textContent )
-  container_task.forEach((task) => {
-    let content = {};
-    for (let i of task.children) {
-      content[i.className] = i.textContent;
-    }
+function checkWeekDayName(taskDate) {
+  /* const newDate = format(new Date(parseISO(taskDate)), "yyyy-MM-dd") */
+  taskDate = setMinDate(taskDate);
+  if (typeof taskDate == "undefined") {
+    taskDate = todayDate();
+  }
+  const objs = objNext7Days()
 
-    all[count] = content;
-    count++;
-  });
-  return all;
+  if (objs.weekDays.includes(taskDate)) {
+    return objs.dateDict[taskDate];
+  } else {
+    return taskDate;
+  }
 }
- */
+function todayDate() {
+  const currentDay = format(new Date(), "yyyy-MM-dd");
+  return currentDay;
+}
+
+function elementToObj(elem) {
+  let obj = {};
+  let arr = Array.from(elem).filter(unnecessaryEls);
+  arr.forEach((item) => (obj[item.id] = item.value));
+
+  function unnecessaryEls(el) {
+    if (el.localName != "label" && el.localName != "button") {
+      if (el.id == "dueDate" || el.value.length > 1) {
+        return el;
+      }
+    }
+  }
+  return obj;
+}
+
+function createKey_storeContent(contentObj) {
+  let newKeyNumber = sessionStorage.getItem("objKey");
+  if (typeof newKeyNumber != "string") {
+    sessionStorage.setItem("objKey", 0);
+  } else {
+    sessionStorage.setItem("objKey", ++newKeyNumber);
+  }
+  contentObj["storageKey"] = sessionStorage["objKey"];
+  contentObj["stored"] = true;
+  sessionStorage[sessionStorage["objKey"]] = JSON.stringify(contentObj);
+}
+
+function storeTask(contentObj, storeContent) {
+  /* console.log(contentObj) */
+  if (contentObj["dueDate"].length > 1) {
+    if (storeContent == true) {
+      createKey_storeContent(contentObj);
+    }
+    contentObj["dueDate"] = checkWeekDayName(contentObj["dueDate"]);
+  } else {
+    contentObj["dueDate"] = todayDate();
+    if (storeContent == true) {
+      createKey_storeContent(contentObj);
+      storeTask(contentObj);
+    }
+  }
+}
+
+function storeContent_changeDate(lst) {
+  let obj = elementToObj(lst);
+
+  if (lst["stored"] == true) {
+    storeTask(lst);
+    return lst;
+  }
+
+  storeTask(obj, true);
+  return obj;
+}
+export { storeContent_changeDate };
