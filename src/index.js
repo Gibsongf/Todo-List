@@ -11,8 +11,6 @@ function callCard() {
 
 /*retrieve all task and separate by number*/
 /* and create a new module that will use it in conjunction of the side-bar click event */
-
-
 callCard();
 const today = document.querySelector(".today");
 const nxt_seven_days = document.querySelector(".seven-days");
@@ -35,20 +33,23 @@ function allTask() {
     count++;
   });
   return all;
+  /* allObjTasks.push(JSON.parse(obj)); */
 }
 const all = allTask();
 let allObjTasks = [];
-/* func that store the task after the add task btn is clicked 
-with the actual date instead of day of the week */
-/* all task save to storage as obj that get returned as obj using JSON Module */
-/* for (let i of Object.keys(all)) {
-  sessionStorage[i] = JSON.stringify(all[i]);
-  let obj = sessionStorage.getItem(i);
-  allObjTasks.push(JSON.parse(obj));
-}
+let selected_el = document.getElementById('selected')
+/* console.log(selected_el) */
+console.log(Object.keys(sessionStorage))
 
 for (let i of Object.keys(sessionStorage)) {
-  if (i != 'IsThisFirstTime_Log_From_LiveServer'){
-    console.log(i, sessionStorage[i],sessionStorage.length);
+  if (i !="IsThisFirstTime_Log_From_LiveServer" && i != 'objKey'){
+    let obj = sessionStorage.getItem(i);
+    allObjTasks.push(JSON.parse(obj));
   }
-} */
+}
+console.log(allObjTasks,sessionStorage)
+allObjTasks.forEach(item => domCard(item))/* all task in the page */
+
+/* func that store the task after the add task btn is clicked 
+with the actual date instead of day of the week */
+

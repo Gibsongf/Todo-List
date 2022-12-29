@@ -56,16 +56,17 @@ function date_or_weekday() {
   function checkDistance(taskDate) {
 
     taskDate = setMinDate(taskDate)
-    console.log(taskDate)
+    if (typeof taskDate == 'undefined'){
+      taskDate = todayDate()
+    }
     const distance = formatDistanceToNowStrict(new Date(taskDate));
     let distanceName = distance.split(' ')
     let formateDate = '';
-    console.log(`Task Date ${taskDate}, Distance: ${distance}  `)
+    /* console.log(`Task Date ${taskDate}, Distance: ${distance}  `) */
     if (distanceName[1] == 'month' || distanceName[1] == 'months'){
       return taskDate
     }
     if (distanceName[1] == 'days' && Number(distanceName[0] > 7 )){
-      console.log( 'asdkadçl')
       return taskDate
     }
     else {
@@ -87,7 +88,8 @@ function date_or_weekday() {
       
     }
   }
-  function todayDate() {
+  function todayDate(a) {
+    /* console.log(typeof a) */
     const currentDay = format(new Date(), "yyyy-MM-dd");
     return currentDay;
   }
@@ -102,7 +104,7 @@ function storageManage() {
 
   function store_changeData(lst) {
     let obj = {};
-    console.log(lst)
+    console.log(typeof lst)
     function emptyDate (date){
       if (date.length > 1) {
         const newDate = checkDate.checkDistance(date);
@@ -131,7 +133,7 @@ function storageManage() {
     }
     console.log(obj['dueDate'])
   
-    sessionStorage[sessionStorage.length] = JSON.stringify(obj);
+    /* sessionStorage[sessionStorage.length] = JSON.stringify(obj); */
     obj['dueDate'] = emptyDate(obj['dueDate'])
     console.log(obj['dueDate'])
     return obj;

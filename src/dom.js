@@ -4,8 +4,14 @@ import dDate from "/src/date-mod.js";
 
 const create = createEl();
 const checkDate = dDate();
+
+function removeStorageItem() {
+  const itemKey = this.parentElement.className.replace("card-", "");
+  sessionStorage.removeItem(itemKey);
+}
 function removeElement(e) {
   const container = document.querySelector(".card-container");
+  console.log(e.textContent, "***", this, this.parentElement);
   if (e.textContent === undefined) {
     const card = this.parentElement;
     container.removeChild(card);
@@ -23,19 +29,22 @@ function domEvents(btn) {
   if (btn.textContent == "Add task") {
     btn.addEventListener("click", addCard);
   }
+  if (btn.textContent == "Delete") {
+    btn.addEventListener("click", removeElement);
+    btn.addEventListener("click", removeStorageItem);
+  }
 }
 
 function addCard() {
   const card = this.parentElement;
   if (card.children[0].value.length > 1) {
-    domCard(card.children, card);
+    domCard(card.children);
     showBtnTask();
   }
 }
-
-function store_changeDate(lst) {
+function elementToObj(elem) {
   let obj = {};
-  let arr = Array.from(lst).filter(unnecessaryEls);
+  let arr = Array.from(elem).filter(unnecessaryEls);
   arr.forEach((item) => (obj[item.id] = item.value));
 
   function unnecessaryEls(el) {
@@ -45,29 +54,49 @@ function store_changeDate(lst) {
       }
     }
   }
-
-  function storeTask() {
-    if (obj["dueDate"].length > 1) {
-      sessionStorage[sessionStorage.length] = JSON.stringify(obj);
-      obj["dueDate"] = checkDate.checkDistance(obj["dueDate"]);
-    } else {
-      obj["dueDate"] = checkDate.todayDate();
-      sessionStorage[sessionStorage.length] = JSON.stringify(obj);
-    }
-  }
-  storeTask();
-
   return obj;
 }
-/* put store_changedata in date-store-mod and there 
-we will store and after data format the date info for use it in the page */
-function domCard(elChildren, parent) {
+function store_changeDate(lst) {
+  let obj = elementToObj(lst);
+  function storeTask(contentObj, storeContent) {
+    function keyStorage() {
+      let newKeyNumber = sessionStorage.getItem("objKey");
+      if (typeof newKeyNumber != "string") {
+        sessionStorage.setItem("objKey", 0);
+      } else {
+        sessionStorage.setItem("objKey", ++newKeyNumber);
+      }
+      obj["storageKey"] = sessionStorage["objKey"];
+      sessionStorage[sessionStorage["objKey"]] = JSON.stringify(contentObj);
+    }
+
+    if (contentObj["dueDate"].length > 1) {
+      if (storeContent == true) {
+        keyStorage();
+      }
+      contentObj["dueDate"] = checkDate.checkDistance(contentObj["dueDate"]);
+    } else {
+      contentObj["dueDate"] = checkDate.todayDate();
+      if (storeContent == true) {
+        keyStorage();
+      }
+    }
+  }
+  if (obj["title"] == undefined) {
+    storeTask(lst);
+    return lst;
+  }
+  storeTask(obj, true);
+  return obj;
+}
+
+function domCard(elChildren) {
+  const card_input = document.querySelector(".card-input");
   const container = document.querySelector(".card-container");
   const card = document.createElement("div");
-  card.className = "card";
   let all_el = store_changeDate(elChildren);
-  console.log(all_el);
-  console.log(sessionStorage);
+  card.className = "card-" + all_el["storageKey"];
+
   const els_info = [
     ["h1", "title", all_el["title"]],
     ["h3", "dueDate", all_el["dueDate"]],
@@ -80,8 +109,15 @@ function domCard(elChildren, parent) {
     const el = simple_el(item[0], item[1], item[2]);
     card.appendChild(el);
   });
-  removeElement(parent);
+
+  if (card_input != null) {
+    container.removeChild(card_input);
+  }
+
+  const btnDel = create.btn_close([], "Delete");
+  card.appendChild(btnDel);
   container.appendChild(card);
+  domEvents(btnDel);
 }
 
 function simple_el(type, selector_name, innerContent) {
@@ -99,14 +135,14 @@ function createInputEls() {
   create.dateInput(allElements);
   create.priorityInput(allElements);
 
-  const btnClose = create.btn_close(allElements);
+  const btnClose = create.btn_close(allElements, "Close");
   const btnAddTask = create.btnAdd(allElements);
   return { allElements, btnClose, btnAddTask };
 }
 
 function inputCard() {
   const card = document.createElement("div");
-  card.className = "card";
+  card.className = "card-input";
   const container = document.querySelector(".card-container");
   const inputs = createInputEls();
   inputs.allElements.forEach((obj) => card.appendChild(obj));

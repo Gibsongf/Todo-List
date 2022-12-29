@@ -58,10 +58,11 @@ function createEl() {
     arr.push(input);
     return input;
   }
-  function btn_close(arr) {
+  function btn_close(arr,txt) {
     const btnClose = document.createElement("button");
-    btnClose.textContent = "Close";
-    btnClose.setAttribute("id", "close");
+    const idName = txt.replace(txt[0],txt[0].toLowerCase())
+    btnClose.textContent = txt;
+    btnClose.setAttribute("id", idName);
     arr.push(btnClose);
     return btnClose;
   }

@@ -55,7 +55,7 @@ ul {
     grid-template-columns: repeat(auto-fit,minmax(300px, 1fr));
     gap: 10px;
 }
-.card {
+.card-container div {
     border: solid black 5px;
     height: 250px;
 }
