@@ -1,5 +1,7 @@
 import "./style.css";
 import { inputCard, domCard, hideBtnTask } from "/src/dom.js";
+import { objNext7Days } from "/src/date-mod.js";
+
 /* sessionStorage.clear() */
 function callCard() {
   const addTask = document.querySelector(".add-task");
@@ -17,39 +19,42 @@ const nxt_seven_days = document.querySelector(".seven-days");
 const all_task = document.querySelector(".all-tasks");
 all_task.setAttribute("id", "selected");
 
-function allTask() {
-  const container_task =
-    document.querySelectorAll(".card"); /* and search local storage use api */
-  let all = {};
-  let count = 1;
-  /* container_task.forEach(task => all[task.children[0].textContent] = task.textContent ) */
-  container_task.forEach((task) => {
-    let content = {};
-    for (let i of task.children) {
-      content[i.className] = i.textContent;
-    }
-
-    all[count] = content;
-    count++;
-  });
-  return all;
-  /* allObjTasks.push(JSON.parse(obj)); */
-}
-const all = allTask();
 let allObjTasks = [];
-let selected_el = document.getElementById('selected')
-/* console.log(selected_el) */
-/* console.log(Object.keys(sessionStorage)) */
-
+let selected_el = document.getElementById("selected");
 for (let i of Object.keys(sessionStorage)) {
-  if (i !="IsThisFirstTime_Log_From_LiveServer" && i != 'objKey'){
+  if (i != "IsThisFirstTime_Log_From_LiveServer" && i != "objKey") {
     let obj = sessionStorage.getItem(i);
     allObjTasks.push(JSON.parse(obj));
   }
 }
-/* console.log(allObjTasks,sessionStorage) */
-allObjTasks.forEach(item => domCard(item))/* all task in the page */
+const projects = document.querySelector('.list-projects')
+console.log(allObjTasks,projects.children)
+function allTask (){
+  allObjTasks.forEach((item) => domCard(item));
+}
+function next7Days() {
+  allObjTasks.forEach((item) => {
+    const obj = objNext7Days();
+    if (obj.weekDaysKeys[0]==item["dueDate"]){
+        return
+    }
+    if (obj.weekDaysKeys.includes(item["dueDate"])) {
+      domCard(item);
+    }
+  });
+}
+function todayTask() {
+  allObjTasks.forEach((item) => {
+    const obj = objNext7Days();
+    if (obj.weekDaysKeys[0]==item["dueDate"]) {
+      console.log(item)
+      domCard(item);
+    }
+  });
+}
+/* allTask () */
+/* next7Days() */
+todayTask()
+/* all task in the page */
 
-/* func that store the task after the add task btn is clicked 
-with the actual date instead of day of the week */
 

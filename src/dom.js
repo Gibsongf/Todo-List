@@ -86,6 +86,7 @@ function createInputEls() {
   create.txtInput("description", allElements);
   create.dateInput(allElements);
   create.priorityInput(allElements);
+  create.projectsSelector(allElements)
 
   const btnClose = create.btn_close(allElements, "Close");
   const btnAddTask = create.btnAdd(allElements);

@@ -49,11 +49,21 @@ function createEl() {
     const label = htmlLabel("Priority");
     const input = document.createElement("select");
     input.setAttribute("id", "priority");
-
+  
     selectOption("High", input);
     selectOption("Mid", input);
     selectOption("Low", input);
 
+    arr.push(label);
+    arr.push(input);
+    return input;
+  }
+  function projectsSelector(arr) {
+    const label = htmlLabel("My Projects");
+    const input = document.createElement("select");
+    input.setAttribute("id", "projects");
+    const projects = Array.from(document.querySelector('.list-projects').children)
+    projects.forEach(li => selectOption(li.textContent,input))
     arr.push(label);
     arr.push(input);
     return input;
@@ -82,6 +92,7 @@ function createEl() {
     txtInput,
     htmlLabel,
     dateInput,
+    projectsSelector
   };
   return Object.assign({}, everything);
 }
