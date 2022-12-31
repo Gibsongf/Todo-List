@@ -62,13 +62,15 @@ function createEl() {
     const label = htmlLabel("My Projects");
     const input = document.createElement("select");
     input.setAttribute("id", "projects");
+
     const projects = Array.from(document.querySelector('.list-projects').children)
     projects.forEach(li => selectOption(li.textContent,input))
+
     arr.push(label);
     arr.push(input);
     return input;
   }
-  function btn_close(arr,txt) {
+  function btn_creator(arr,txt) {
     const btnClose = document.createElement("button");
     const idName = txt.replace(txt[0],txt[0].toLowerCase())
     btnClose.textContent = txt;
@@ -77,16 +79,10 @@ function createEl() {
     return btnClose;
   }
 
-  function btnAdd(arr) {
-    const btn = document.createElement("button");
-    btn.textContent = "Add task";
-    btn.setAttribute("id", "add-card");
-    arr.push(btn);
-    return btn;
-  }
+  
   const everything = {
-    btnAdd,
-    btn_close,
+
+    btn_creator,
     priorityInput,
     selectOption,
     txtInput,

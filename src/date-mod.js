@@ -1,8 +1,16 @@
 const { format, parseISO, addDays, isBefore } = require("date-fns");
 
-function setMinDate(userDate) {
+function validDate(userDate,fromStorage) {
   /*     console.log(`task date :${userDate} || current day ${todayDate()}`)
    */ const result = isBefore(parseISO(userDate), parseISO(todayDate()));
+  if (fromStorage == true){
+    if (result == true) {
+      return true;
+    }
+    if (result == false) {
+      return userDate;
+    }
+  }
   if (result == true) {
     return todayDate();
   }
@@ -10,6 +18,7 @@ function setMinDate(userDate) {
     return userDate;
   }
 }
+
 function objNext7Days() {
   let days = [0, 1, 2, 3, 4, 5, 6, 7];
   let currentDay = todayDate();
@@ -32,7 +41,7 @@ function objNext7Days() {
 
 function checkWeekDayName(taskDate) {
   /* const newDate = format(new Date(parseISO(taskDate)), "yyyy-MM-dd") */
-  taskDate = setMinDate(taskDate);
+  taskDate = validDate(taskDate);
   if (typeof taskDate == "undefined") {
     taskDate = todayDate();
   }
@@ -103,4 +112,4 @@ function storeContent_changeDate(lst) {
   storeTask(obj, true);
   return obj;
 }
-export {storeContent_changeDate, objNext7Days };
+export {storeContent_changeDate, objNext7Days, validDate };

@@ -1,6 +1,6 @@
 import "./style.css";
-import { inputCard, domCard, hideBtnTask } from "/src/dom.js";
-import { objNext7Days } from "/src/date-mod.js";
+import { inputCard, domCard, hideBtnTask, newProject } from "/src/dom.js";
+import { objNext7Days, validDate } from "/src/date-mod.js";
 
 /* sessionStorage.clear() */
 function callCard() {
@@ -10,10 +10,17 @@ function callCard() {
     hideBtnTask();
   });
 }
-
+function callProject() {
+  const addProject = document.querySelector(".add-project");
+  addProject.addEventListener("click", () => {
+    newProject();
+    
+  });
+}
 /*retrieve all task and separate by number*/
 /* and create a new module that will use it in conjunction of the side-bar click event */
 callCard();
+callProject()
 const today = document.querySelector(".today");
 const nxt_seven_days = document.querySelector(".seven-days");
 const all_task = document.querySelector(".all-tasks");
@@ -28,9 +35,14 @@ for (let i of Object.keys(sessionStorage)) {
   }
 }
 const projects = document.querySelector('.list-projects')
-console.log(allObjTasks,projects.children)
 function allTask (){
-  allObjTasks.forEach((item) => domCard(item));
+  allObjTasks.forEach((item) => {
+    let isDue = validDate(item['dueDate'],true)
+    if (isDue==true){
+      item['dueDate'] = 'Due'
+    }
+    domCard(item)
+  });
 }
 function next7Days() {
   allObjTasks.forEach((item) => {
@@ -52,9 +64,8 @@ function todayTask() {
     }
   });
 }
-/* allTask () */
+allTask ()
 /* next7Days() */
-todayTask()
-/* all task in the page */
+/* todayTask() */
 
 
