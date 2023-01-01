@@ -25,14 +25,14 @@ function createEl() {
     label.htmlFor = contentName.toLowerCase();
     return label;
   }
-  function txtInput(txt, arr) {
+  function txtInput(txt, arr, noId) {
     const input = document.createElement("input");
     input.type = "text";
     input.placeholder = txt;
     if (txt == "title") {
       input.required = true;
     }
-
+    txt = txt.replace(' ','-').toLowerCase()
     input.setAttribute("id", txt);
     arr.push(input);
     return input;
@@ -50,7 +50,7 @@ function createEl() {
     const input = document.createElement("select");
     input.setAttribute("id", "priority");
   
-    const slc = selectOption("High", input);
+    selectOption("High", input);
     selectOption("Mid", input);
     selectOption("Low", input);
 

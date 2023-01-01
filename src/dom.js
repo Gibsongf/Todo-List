@@ -79,9 +79,9 @@ function addProject(txt){
 }
 function addContent(e) {
   const card = e.parentElement;
-  if(card.children[0].value == undefined){
-
-    if (card.children[1].value != '') {
+  console.log(card.children[0].value, card.children[0],card.children[1].value)
+  if(card.children[0].value == undefined || card.children[0].value == '' ){
+    if (card.children[1].value != '' ) {
       addProject(card.children[1].value)
       return true
     }
@@ -151,9 +151,18 @@ function InputElsProject() {
   return { allElements, btnClose, btnAddProject };
 }
 function newProject(){
-  const inputs = InputElsProject()
-  domEvents(inputs.btnClose);
-  domEvents(inputs.btnAddProject);
+  const hasPop = document.querySelector('.pop-up-project')
+  console.log(hasPop != null)
+  if (hasPop != null){
+    hasPop.setAttribute("style", "display: block;")
+    clearInputFields(hasPop.children[0])
+  }
+  else{
+    const inputs = InputElsProject()
+    domEvents(inputs.btnClose);
+    domEvents(inputs.btnAddProject);
+  }
+  
   
 
 }
@@ -179,7 +188,8 @@ function clearInputFields(popContent){
 }
 
 function inputCard() {
-  const hasPop = document.querySelector('.pop-up')
+  const hasPop = document.querySelector('.pop-up-card')
+  console.log(hasPop != null)
   if (hasPop != null){
     hasPop.setAttribute("style", "display: block;")
     

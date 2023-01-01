@@ -36,7 +36,9 @@ function sideBarProjects(){
     sessionStorage['projects'] = 'Personal,'
   }
   const all = sessionStorage['projects'].split(',')
+  console.log(all)
   all.forEach(txt => {
+    console.log(txt)
     const li = document.createElement('li')
     li.textContent = txt 
     ul_projects.appendChild(li)

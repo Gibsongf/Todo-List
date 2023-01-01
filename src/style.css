@@ -16,12 +16,17 @@ ul {
 
 }
 #content {
+    height: 100%;
     display: grid;
-    grid-template-columns: 1fr 3fr ;
-    grid-template-rows: repeat(auto-fill,minmax(880px,1fr));
+    grid-template-columns: 250px 4fr ;
+    grid-template-rows: 40px 1fr 1fr  ;
+    
     
 }
 .side-bar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
     text-align: start;
     grid-column: 1;
     grid-row: 1/last-row;
@@ -29,8 +34,17 @@ ul {
     color: white;
     background-color: #1B8ECC;
     font-size: 1.3rem;
-   
-
+    display: grid;
+    grid-template-rows: repeat(auto-fill,minmax(50px,1fr));
+}
+.projects {
+    grid-row: 6;
+}
+.user-name {
+    grid-row: 1/2;
+}
+.default-choices {
+    grid-row: 3/5;
 }
 .pop-up-card, .pop-up-project {
     position: fixed; 
@@ -44,12 +58,13 @@ ul {
     background-color: rgba(0,0,0,0.4); 
 }
 .pop-up-content {
-background-color: #fefefe;
+    background-color: #fefefe;
   margin: 15% auto; 
   padding: 20px;
   border: 1px solid #888;
   width: 50%;
   display: flex;
+  flex-direction: column;
 }
 .side-bar  ul > li:hover,#selected {
     background-color: #0e5d88;
@@ -57,9 +72,10 @@ background-color: #fefefe;
 
 
 .card-container {
-    padding: 100px;
+    grid-column: 2;
+    grid-row: 2/5;
     display: grid;
-    grid-template-columns: repeat(auto-fit,minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit,minmax(150px, 1fr));
     gap: 10px;
 }
 .card-container div {
@@ -68,3 +84,6 @@ background-color: #fefefe;
 }
 
 
+.add-task {
+    grid-column: 2;
+}
