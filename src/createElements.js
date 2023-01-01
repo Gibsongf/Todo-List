@@ -50,7 +50,7 @@ function createEl() {
     const input = document.createElement("select");
     input.setAttribute("id", "priority");
   
-    selectOption("High", input);
+    const slc = selectOption("High", input);
     selectOption("Mid", input);
     selectOption("Low", input);
 

@@ -1,8 +1,7 @@
 const { format, parseISO, addDays, isBefore } = require("date-fns");
 
 function validDate(userDate,fromStorage) {
-  /*     console.log(`task date :${userDate} || current day ${todayDate()}`)
-   */ const result = isBefore(parseISO(userDate), parseISO(todayDate()));
+  const result = isBefore(parseISO(userDate), parseISO(todayDate()));
   if (fromStorage == true){
     if (result == true) {
       return true;
@@ -35,7 +34,6 @@ function objNext7Days() {
   let weekDaysKeys = Object.keys(dateDict);
   dateDict[weekDaysKeys[0]] = "Today";
   dateDict[weekDaysKeys[1]] = "Tomorrow";
-  /* console.log(dateDict); */
   return { dateDict, weekDaysKeys };
 }
 
@@ -86,7 +84,6 @@ function createKey_storeContent(contentObj) {
 }
 
 function storeTask(contentObj, storeContent) {
-  /* console.log(contentObj) */
   if (contentObj["dueDate"].length > 1) {
     if (storeContent == true) {
       createKey_storeContent(contentObj);

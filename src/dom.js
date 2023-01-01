@@ -8,11 +8,10 @@ function removeStorageItem() {
   const itemKey = this.parentElement.className.replace("card-", "");
   sessionStorage.removeItem(itemKey);
 }
-function deleteElement(e) {
+function deleteElement() {
   const container = document.querySelector(".card-container");
   showBtnTask();
   if (this.textContent == 'Delete') {
-    /* console.log(e.textContent, "***", this.textContent, this.parentElement,this.parentElement.parentElement); */
     const card = this.parentElement;
     container.removeChild(card);
     return
@@ -20,16 +19,15 @@ function deleteElement(e) {
 }
 function hideElement (e){
   showBtnTask();
-  
+  const arr = ['pop-up-card','pop-up-project','pop-up-content']
   if (e.srcElement == undefined){
-    console.log(e.srcElement)
     e.srcElement = e
   }
-  if(e.srcElement.parentElement.className == 'pop-up' ){
+  if(arr.includes(e.srcElement.parentElement.className)){
     e.srcElement.parentElement.parentElement.setAttribute("style", "display: none;");
     return
   }
-  if(e.srcElement.parentElement.parentElement.className == 'pop-up'){
+  if(arr.includes(e.srcElement.parentElement.className)){
     e.srcElement.parentElement.parentElement.setAttribute("style", "display: none;");
     return
   }
@@ -62,21 +60,33 @@ function domEvents(btn) {
     
   }
 }
-
+function updateProjectStorage (){
+  const projects = document.querySelector('.list-projects').children
+  const keys = Object.keys(sessionStorage)
+  if (!keys.includes('projects')){
+    sessionStorage['projects'] = 'Personal,'
+  }
+  const arr_proj =[] 
+  Array.from(projects).forEach(p => arr_proj.push(p.textContent))
+  sessionStorage['projects'] = arr_proj
+}
 function addProject(txt){
   const ul_projects = document.querySelector('.list-projects')
-  const li = document.querySelector('li')
+  const li = document.createElement('li')
   li.textContent = txt
   ul_projects.appendChild(li)
+  updateProjectStorage ()
 }
 function addContent(e) {
   const card = e.parentElement;
-  
   if(card.children[0].value == undefined){
-    console.log(card.children[1],card.children[1].value)
-    if (card.children[1].value.length > 1) {
+
+    if (card.children[1].value != '') {
       addProject(card.children[1].value)
       return true
+    }
+    else{
+      return false
     }
   }
   if (card.children[0].value.length > 1) {
@@ -122,9 +132,9 @@ function simple_el(type, selector_name, innerContent) {
   ell.textContent = innerContent;
   return ell;
 }
-function popEl(){
+function popEl(name){
   const content = document.getElementById('content')
-  const popup = simple_el('div','pop-up')
+  const popup = simple_el('div','pop-up-'+ name)
   const popup_content = simple_el('div','pop-up-content')
   content.appendChild(popup)
   popup.appendChild(popup_content)
@@ -136,7 +146,7 @@ function InputElsProject() {
   create.txtInput('',allElements);
   const btnClose = create.btn_creator(allElements, "Close");
   const btnAddProject = create.btn_creator(allElements,'New project');
-  const popup_content = popEl()
+  const popup_content = popEl('project')
   allElements.forEach(el => popup_content.appendChild(el))
   return { allElements, btnClose, btnAddProject };
 }
@@ -144,10 +154,12 @@ function newProject(){
   const inputs = InputElsProject()
   domEvents(inputs.btnClose);
   domEvents(inputs.btnAddProject);
+  
 
 }
 function defaultCardInput() {
   const allElements = [];
+  
   create.txtInput("title", allElements);
   create.txtInput("description", allElements);
   create.dateInput(allElements);
@@ -156,16 +168,30 @@ function defaultCardInput() {
   
   const btnClose = create.btn_creator(allElements, "Close");
   const btnAddTask = create.btn_creator(allElements, 'Add task');
-  const popup_content = popEl()
+  const popup_content = popEl('card')
   allElements.forEach(el => popup_content.appendChild(el))
 
-  return { allElements, btnClose, btnAddTask };
+  return { allElements, btnClose, btnAddTask, popup_content };
+}
+function clearInputFields(popContent){
+  const t = Array.from(popContent.children)
+  t.forEach( i => i.value = '')
 }
 
 function inputCard() {
-  const inputs = defaultCardInput();
-  domEvents(inputs.btnClose);
-  domEvents(inputs.btnAddTask);
+  const hasPop = document.querySelector('.pop-up')
+  if (hasPop != null){
+    hasPop.setAttribute("style", "display: block;")
+    
+    clearInputFields(hasPop.children[0])
+  }
+  else {
+    const inputs = defaultCardInput();
+    domEvents(inputs.btnClose);
+    domEvents(inputs.btnAddTask);
+    clearInputFields(inputs.popup_content)
+  }
+  
 }
 function showBtnTask() {
   const addTask = document.querySelector(".add-task");
