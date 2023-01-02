@@ -52,10 +52,9 @@ function createEl() {
     const label = htmlLabel("Priority");
     const input = document.createElement("select");
     input.setAttribute("id", "priority");
-  
-    selectOption("High", input);
-    selectOption("Mid", input);
     selectOption("Low", input);
+    selectOption("Mid", input);
+    selectOption("High", input);
 
     arr.push(label);
     arr.push(input);

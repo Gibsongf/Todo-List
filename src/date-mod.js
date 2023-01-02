@@ -63,8 +63,13 @@ function elementToObj(elem) {
 
   function unnecessaryEls(el) {
     if (el.localName != "label" && el.localName != "button") {
-      if (el.id == "dueDate" || el.value.length > 1) {
+      if (el.id == "dueDate" || el.value.length > 1 ) {
+        console.log(el)
         return el;
+      }
+      if(el.localName == "select"){
+        el.value = el[0].value
+        return el
       }
     }
   }
@@ -99,6 +104,7 @@ function storeTask(contentObj, storeContent) {
 }
 
 function storeContent_changeDate(lst) {
+  console.log(lst)
   let obj = elementToObj(lst);
 
   if (lst["stored"] == true) {

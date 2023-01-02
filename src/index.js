@@ -1,7 +1,7 @@
 import "./style.css";
 import { inputCard, domCard, newProject } from "/src/dom.js";
 import { objNext7Days, validDate } from "/src/date-mod.js";
-
+/* need put project name in obj of the card before saving to storage */
 function callCard() {
   const addTask = document.querySelector(".add-task");
   addTask.addEventListener("click", () => {
