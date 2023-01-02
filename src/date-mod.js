@@ -104,7 +104,7 @@ function storeTask(contentObj, storeContent) {
 }
 
 function storeContent_changeDate(lst) {
-  console.log(lst)
+  
   let obj = elementToObj(lst);
 
   if (lst["stored"] == true) {

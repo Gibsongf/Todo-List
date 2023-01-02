@@ -1,7 +1,13 @@
 import "./style.css";
 import { inputCard, domCard, newProject } from "/src/dom.js";
 import { objNext7Days, validDate } from "/src/date-mod.js";
-/* need put project name in obj of the card before saving to storage */
+
+
+/* projects event listener */
+
+
+
+
 function callCard() {
   const addTask = document.querySelector(".add-task");
   addTask.addEventListener("click", () => {
@@ -34,7 +40,6 @@ function sideBarProjects() {
 }
 
 function allTask() {
-  console.log("all task");
   const allObjTasks = getAllTask();
   allObjTasks.forEach((item) => {
     let isDue = validDate(item["dueDate"], true);
@@ -45,7 +50,6 @@ function allTask() {
   });
 }
 function showAll() {
-  console.log("all task");
   const allObjTasks = getAllTask();
   allObjTasks.forEach((item) => {
     document
@@ -54,7 +58,6 @@ function showAll() {
   });
 }
 function showNext7Days(e) {
-  console.log("today + 7 days");
   const allObjTasks = getAllTask();
   allObjTasks.forEach((item) => {
     const obj = objNext7Days();
@@ -71,7 +74,7 @@ function showNext7Days(e) {
   });
 }
 
-function showTodayTask(e) {  
+function showTodayTask(e) {
   const allObjTasks = getAllTask();
   allObjTasks.forEach((item) => {
     const obj = objNext7Days();
@@ -89,12 +92,28 @@ function showTodayTask(e) {
   });
 }
 
-function selectedSideBar(el) {
-  if (document.getElementById("selected") != null) {
-    el.setAttribute("id", "");
-  } else {
-    el.setAttribute("id", "selected");
+
+function btnActive() {
+  let current = document.getElementById("selected");
+  if (current != null){
+    current.setAttribute("id", "");
+    /* console.log(current) */
   }
+  this.setAttribute("id", "selected");
+  
+  
+  const obj = {
+    'Today':showTodayTask,
+    'Next 7 Days':showNext7Days,
+    'All Tasks':showAll
+  }
+  if(Object.keys(obj).includes(this.textContent)){
+    obj[this.textContent]()
+  }
+  else {
+    showProject(this.textContent.toLowerCase())
+  }
+  
 }
 function getAllTask() {
   let allObjTasks = [];
@@ -110,18 +129,33 @@ function getAllTask() {
   }
   return allObjTasks;
 }
+function showProject(e){
+  const allObjTasks = getAllTask();
+  allObjTasks.forEach((item) => {
+    if(item['projects'] == e){
+      document
+        .querySelector(".card-" + item["storageKey"])
+        .setAttribute("style", "display:block");
 
+    }
+    else {
+      document
+        .querySelector(".card-" + item["storageKey"])
+        .setAttribute("style", "display:none");
+    }
+  })
+}
 sideBarProjects();
-const today = document.querySelector(".today");
-today.addEventListener("click", showTodayTask);
-const nxt_seven_days = document.querySelector(".seven-days");
-nxt_seven_days.addEventListener("click", showNext7Days);
-const all_task = document.querySelector(".all-tasks");
-all_task.addEventListener("click", showAll);
-
 callCard();
 callProject();
-
 allTask();
-/* next7Days() */
-/* todayTask() */
+
+const today = document.querySelector(".today");
+today.addEventListener("click", btnActive);
+const nxt_seven_days = document.querySelector(".seven-days");
+nxt_seven_days.addEventListener("click", btnActive);
+const all_task = document.querySelector(".all-tasks");
+all_task.addEventListener("click", btnActive);
+const projects = Array.from(document.querySelector('.list-projects').children)
+projects.forEach(p => p.addEventListener("click", btnActive))
+
