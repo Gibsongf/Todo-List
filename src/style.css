@@ -78,6 +78,9 @@ ul {
     grid-template-columns: repeat(auto-fit,minmax(150px, 1fr));
     gap: 10px;
 }
+:invalid {
+    border: red solid 2px;
+}
 .card-container div {
     border: solid black 5px;
     height: 250px;

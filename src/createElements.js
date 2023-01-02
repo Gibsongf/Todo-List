@@ -20,20 +20,23 @@ function createEl() {
   }
   function htmlLabel(contentName) {
     const label = document.createElement("label");
-    label.textContent = contentName + ":";
-    label.setAttribute("id", contentName.toLowerCase());
+    let newName = contentName[0].toUpperCase()+contentName.slice(1)
+    label.textContent = newName + ":";
+    /* label.setAttribute("id", contentName.toLowerCase()); */
     label.htmlFor = contentName.toLowerCase();
     return label;
   }
-  function txtInput(txt, arr, noId) {
+  function txtInput(name,pHolder, arr) {
+    const label = htmlLabel(name)
     const input = document.createElement("input");
     input.type = "text";
-    input.placeholder = txt;
-    if (txt == "title") {
+    input.placeholder = pHolder;
+    if (name == "title" || name == 'name') {
       input.required = true;
     }
-    txt = txt.replace(' ','-').toLowerCase()
-    input.setAttribute("id", txt);
+    name = name.replace(' ','-').toLowerCase()
+    input.setAttribute("id", name);
+    arr.push(label);
     arr.push(input);
     return input;
   }
@@ -78,10 +81,24 @@ function createEl() {
     arr.push(btnClose);
     return btnClose;
   }
-
+  function simple_el(type, selector_name, innerContent) {
+    const ell = document.createElement(type);
+    ell.className = selector_name;
+    ell.textContent = innerContent;
+    return ell;
+  }
+  function popEl(name) {
+    const content = document.getElementById("content");
+    const popup = simple_el("div", "pop-up-" + name);
+    const popup_content = simple_el("div", "pop-up-content");
+    content.appendChild(popup);
+    popup.appendChild(popup_content);
+    return popup_content;
+  }
   
   const everything = {
-
+    simple_el,
+    popEl,
     btn_creator,
     priorityInput,
     selectOption,
