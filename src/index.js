@@ -85,6 +85,37 @@ function showTodayTask(e) {
   });
 }
 
+function getAllTask() {
+  let allObjTasks = [];
+  for (let i of Object.keys(sessionStorage)) {
+    if (
+      i != "IsThisFirstTime_Log_From_LiveServer" &&
+      i != "objKey" &&
+      i != "projects"
+    ) {
+      let obj = sessionStorage.getItem(i);
+      allObjTasks.push(JSON.parse(obj));
+    }
+  }
+  return allObjTasks;
+}
+function showProject(e){
+  const allObjTasks = getAllTask();
+  allObjTasks.forEach((item) => {
+    /* console.log(item['projects'], item['projects'] == e, e) */
+    if(item['projects'] == e){
+      document
+        .querySelector(".card-" + item["storageKey"])
+        .setAttribute("style", "display:block");
+
+    }
+    else {
+      document
+        .querySelector(".card-" + item["storageKey"])
+        .setAttribute("style", "display:none");
+    }
+  })
+}
 
 function btnActive() {
   let current = document.getElementById("selected");
@@ -103,39 +134,8 @@ function btnActive() {
     obj[this.textContent]()
   }
   else {
-    showProject(this.textContent.toLowerCase())
-  }
-  
-}
-function getAllTask() {
-  let allObjTasks = [];
-  for (let i of Object.keys(sessionStorage)) {
-    if (
-      i != "IsThisFirstTime_Log_From_LiveServer" &&
-      i != "objKey" &&
-      i != "projects"
-    ) {
-      let obj = sessionStorage.getItem(i);
-      allObjTasks.push(JSON.parse(obj));
-    }
-  }
-  return allObjTasks;
-}
-function showProject(e){
-  const allObjTasks = getAllTask();
-  allObjTasks.forEach((item) => {
-    if(item['projects'] == e){
-      document
-        .querySelector(".card-" + item["storageKey"])
-        .setAttribute("style", "display:block");
-
-    }
-    else {
-      document
-        .querySelector(".card-" + item["storageKey"])
-        .setAttribute("style", "display:none");
-    }
-  })
+    showProject(this.children[0].textContent.toLowerCase())
+  } 
 }
 sideBarProjects();
 eventCreateCard();
@@ -151,3 +151,4 @@ all_task.addEventListener("click", btnActive);
 const projects = Array.from(document.querySelector('.list-projects').children)
 projects.forEach(p => p.addEventListener("click", btnActive))
 
+export { btnActive}

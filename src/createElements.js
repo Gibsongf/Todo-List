@@ -1,4 +1,3 @@
-
 function createEl() {
   const { format } = require("date-fns");
   const currentDate = format(new Date(), "MM-dd-yyyy");
@@ -8,7 +7,7 @@ function createEl() {
     const input = document.createElement("input");
     input.type = "date";
     input.setAttribute("id", "dueDate");
-    input.min = currentDate; 
+    input.min = currentDate;
     arr.push(label);
     arr.push(input);
 
@@ -16,20 +15,20 @@ function createEl() {
   }
   function htmlLabel(contentName) {
     const label = document.createElement("label");
-    let newName = contentName[0].toUpperCase()+contentName.slice(1)
+    let newName = contentName[0].toUpperCase() + contentName.slice(1);
     label.textContent = newName + ":";
     label.htmlFor = contentName.toLowerCase();
     return label;
   }
-  function txtInput(name,pHolder, arr) {
-    const label = htmlLabel(name)
+  function txtInput(name, pHolder, arr) {
+    const label = htmlLabel(name);
     const input = document.createElement("input");
     input.type = "text";
     input.placeholder = pHolder;
-    if (name == "title" || name == 'name') {
+    if (name == "title" || name == "name") {
       input.required = true;
     }
-    name = name.replace(' ','-').toLowerCase()
+    name = name.replace(" ", "-").toLowerCase();
     input.setAttribute("id", name);
     arr.push(label);
     arr.push(input);
@@ -60,16 +59,18 @@ function createEl() {
     const input = document.createElement("select");
     input.setAttribute("id", "projects");
 
-    const projects = Array.from(document.querySelector('.list-projects').children)
-    projects.forEach(li => selectOption(li.textContent,input))
+    const projects = Array.from(
+      document.querySelector(".list-projects").children
+    );
+    projects.forEach((li) => selectOption(li.children[0].textContent, input));
 
     arr.push(label);
     arr.push(input);
     return input;
   }
-  function btn_creator(arr,txt) {
+  function btn_creator(arr, txt) {
     const btnClose = document.createElement("button");
-    const idName = txt.replace(txt[0],txt[0].toLowerCase())
+    const idName = txt.replace(txt[0], txt[0].toLowerCase());
     btnClose.textContent = txt;
     btnClose.setAttribute("id", idName);
     arr.push(btnClose);
@@ -77,7 +78,7 @@ function createEl() {
   }
   function simple_el(type, selector_name, innerContent) {
     const ell = document.createElement(type);
-    if(selector_name.length > 1){
+    if (selector_name.length > 1) {
       ell.className = selector_name;
     }
     ell.textContent = innerContent;
@@ -91,7 +92,7 @@ function createEl() {
     popup.appendChild(popup_content);
     return popup_content;
   }
-  
+
   const everything = {
     simple_el,
     popEl,
@@ -101,7 +102,7 @@ function createEl() {
     txtInput,
     htmlLabel,
     dateInput,
-    projectsSelector
+    projectsSelector,
   };
   return Object.assign({}, everything);
 }

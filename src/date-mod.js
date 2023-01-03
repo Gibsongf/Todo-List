@@ -66,7 +66,12 @@ function elementToObj(elem) {
       if (el.id == "dueDate" || el.value.length > 1 ) {
         return el;
       }
-      if(el.localName == "select"){
+      
+      if(el.localName == "select" && el.children[0] != undefined){
+        if(el.children.length < 1){
+          return
+        }
+
         el.value = el[0].value
         return el
       }

@@ -1,25 +1,24 @@
 import "./style.css";
 import createEl from "/src/createElements.js";
 import { storeContent_changeDate } from "/src/date-mod.js";
-
+import { btnActive} from '/src/index.js'
 const create = createEl();
 
 function removeStorageItem() {
   const itemKey = this.parentElement.className.replace("card-", "");
-  if(this.parentElement.localName == 'li'){
+  if (this.parentElement.localName == "li") {
     const li = this.parentElement.children[0];
-    let arr = sessionStorage['projects'].split(',')
-    let indx = arr.filter(ar => ar != li.textContent)
-    sessionStorage['projects'] = indx
-    return
+    let arr = sessionStorage["projects"].split(",");
+    let indx = arr.filter((ar) => ar != li.textContent);
+    sessionStorage["projects"] = indx;
+    return;
   }
   sessionStorage.removeItem(itemKey);
 }
 function deleteElement() {
   const container = document.querySelector(".card-container");
-  const ul = document.querySelector('.list-projects')
-  console.log(this.parentElement.localName,)
-  if(this.parentElement.localName == 'li'){
+  const ul = document.querySelector(".list-projects");
+  if (this.parentElement.localName == "li") {
     const li = this.parentElement;
     ul.removeChild(li);
     return;
@@ -69,38 +68,38 @@ function domEvents(btn) {
 function updateProjectStorage() {
   const projects = document.querySelector(".list-projects").children;
   const arr_proj = [];
-  Array.from(projects).forEach((p) => {
-    arr_proj.push(p.children[0].textContent)
+  Array.from(projects).forEach(p => {
+    arr_proj.push(p.children[0].textContent);
+    p.addEventListener("click", btnActive)
+    
   });
   sessionStorage["projects"] = arr_proj;
-}
-function checkProjectTitle(btn){
-  const name = document.getElementById('name')
-  if (name.value.length > 1 && name.value.length < 20){
-      addProject(name.value)
-      hideElement(btn)
-  }
   
+}
+function checkProjectTitle(btn) {
+  const name = document.getElementById("name");
+  if (name.value.length > 1 && name.value.length < 20) {
+    addProject(name.value);
+    hideElement(btn);
+  }
 }
 function addProject(txt) {
   const ul_projects = document.querySelector(".list-projects");
   const li = document.createElement("li");
-  const div = create.simple_el('div','',txt)
-  li.appendChild(div)
+  const div = create.simple_el("div", "", txt);
+  li.appendChild(div);
   ul_projects.appendChild(li);
   updateProjectStorage();
   const btnDel = create.btn_creator([], "Delete");
   li.appendChild(btnDel);
   domEvents(btnDel);
-  
-
 }
 function addTask(btn) {
-  const task = document.querySelector('.pop-up-card').children[0]
-  const title = document.getElementById('title')
-  if (title.value.length > 1 && title.value.length < 20){
-      domCard(task.children)
-      hideElement(btn)
+  const task = document.querySelector(".pop-up-card").children[0];
+  const title = document.getElementById("title");
+  if (title.value.length > 1 && title.value.length < 20) {
+    domCard(task.children);
+    hideElement(btn);
   }
 }
 
@@ -134,11 +133,9 @@ function domCard(elChildren) {
   domEvents(btnDel);
 }
 
-
-
 function InputElsProject() {
   const allElements = [];
-  create.txtInput("name",'', allElements);
+  create.txtInput("name", "", allElements);
   const btnClose = create.btn_creator(allElements, "Close");
   const btnAddProject = create.btn_creator(allElements, "New project");
   const popup_content = create.popEl("project");
@@ -161,8 +158,12 @@ function newProject() {
 function defaultCardInput() {
   const allElements = [];
 
-  create.txtInput("title",'min: 2 characters, max: 25 characters', allElements);
-  create.txtInput("description",'', allElements);
+  create.txtInput(
+    "title",
+    "min: 2 characters, max: 25 characters",
+    allElements
+  );
+  create.txtInput("description", "", allElements);
   create.dateInput(allElements);
   create.priorityInput(allElements);
   create.projectsSelector(allElements);
@@ -181,7 +182,6 @@ function clearInputFields(popContent) {
 
 function inputCard() {
   const hasPop = document.querySelector(".pop-up-card");
-  console.log(hasPop != null);
   if (hasPop != null) {
     hasPop.setAttribute("style", "display: block;");
 
@@ -194,4 +194,4 @@ function inputCard() {
   }
 }
 
-export { inputCard, domCard, newProject, addProject};
+export { inputCard, domCard, newProject, addProject };
