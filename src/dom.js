@@ -1,20 +1,9 @@
 import "./style.css";
 import createEl from "/src/createElements.js";
-import { storeContent_changeDate } from "/src/date-mod.js";
-import { btnActive } from "/src/index.js";
+import { handleContent,removeStorageItem, updateProjectStorage } from "/src/date-storage-mod.js";
 const create = createEl();
 
-function removeStorageItem() {
-  const itemKey = this.parentElement.className.replace("card-", "");
-  if (this.parentElement.localName == "li") {
-    const li = this.parentElement.children[0];
-    let arr = sessionStorage["projects"].split(",");
-    let indx = arr.filter((ar) => ar != li.textContent);
-    sessionStorage["projects"] = indx;
-    return;
-  }
-  sessionStorage.removeItem(itemKey);
-}
+
 function deleteElement() {
   const container = document.querySelector(".card-container");
   const ul = document.querySelector(".list-projects");
@@ -65,15 +54,7 @@ function domEvents(btn) {
     btn.addEventListener("click", checkProjectTitle);
   }
 }
-function updateProjectStorage() {
-  const projects = document.querySelector(".list-projects").children;
-  const arr_proj = [];
-  Array.from(projects).forEach((p) => {
-    arr_proj.push(p.children[0].textContent);
-    p.addEventListener("click", btnActive);
-  });
-  sessionStorage["projects"] = arr_proj;
-}
+
 function checkProjectTitle(btn) {
   const name = document.getElementById("name");
   if (name.value.length > 1 && name.value.length < 20) {
@@ -105,17 +86,17 @@ function newDomCard(elChildren) {
   const card_input = document.querySelector(".card-input");
   const container = document.querySelector(".card-container");
   const card = document.createElement("div");
-  let all_el = storeContent_changeDate(elChildren);
+  let all_el = handleContent(elChildren);
   card.className = "card-" + all_el["storageKey"];
 
   const els_info = [
     ["h1", "title", all_el["title"]],
     ["h3", "dueDate", all_el["dueDate"]],
     ["h3", "description", all_el["description"]],
-    /* here a function that change the card color with the priority selected */
+    
     ["h3", "priority", all_el["priority"]],
   ];
-
+  /* need a function that change the card color with the priority selected */
   els_info.forEach((item) => {
     const el = create.simple_el(item[0], item[1], item[2]);
     card.appendChild(el);
@@ -178,12 +159,18 @@ function clearInputFields(popContent) {
   t.forEach((i) => (i.value = ""));
 }
 
+function updateSelectorOptions(){
+  let parent = document.querySelector('.pop-up-card').children[0]
+  let child = document.getElementById('projects')
+  let newChild = create.projectsSelector([]);
+  parent.replaceChild(newChild,child)
+}
 function inputCard() {
   const hasPop = document.querySelector(".pop-up-card");
   if (hasPop != null) {
     hasPop.setAttribute("style", "display: block;");
-
     clearInputFields(hasPop.children[0]);
+    updateSelectorOptions();
   } else {
     const inputs = defaultCardInput();
     domEvents(inputs.btnClose);

@@ -1,4 +1,5 @@
 const { format, parseISO, addDays, isBefore } = require("date-fns");
+import { btnActive } from "/src/index.js";
 
 function validDate(userDate, fromStorage) {
   const result = isBefore(parseISO(userDate), parseISO(todayDate()));
@@ -27,9 +28,7 @@ function objNext7Days() {
     let ad = addDays(parseISO(currentDay), n);
     let arr_date = format(new Date(ad), "yyyy-MM-dd EEEE").split(" ");
     dateDict[arr_date[0]] = arr_date[1];
-    /* if (n == 7) {
-      dateDict[arr_date[0]] = "Next " + arr_date[1];
-    } */
+   
   }
   let weekDaysKeys = Object.keys(dateDict);
   dateDict[weekDaysKeys[0]] = "Today";
@@ -38,7 +37,6 @@ function objNext7Days() {
 }
 
 function checkWeekDayName(taskDate) {
-  /* const newDate = format(new Date(parseISO(taskDate)), "yyyy-MM-dd") */
   taskDate = validDate(taskDate);
   if (typeof taskDate == "undefined") {
     taskDate = todayDate();
@@ -107,7 +105,7 @@ function storeTask(contentObj, storeContent) {
   }
 }
 
-function storeContent_changeDate(lst) {
+function handleContent(lst) {
   let obj = elementToObj(lst);
 
   if (lst["stored"] == true) {
@@ -118,4 +116,25 @@ function storeContent_changeDate(lst) {
   storeTask(obj, true);
   return obj;
 }
-export { storeContent_changeDate, objNext7Days, validDate };
+
+function removeStorageItem() {
+  const itemKey = this.parentElement.className.replace("card-", "");
+  if (this.parentElement.localName == "li") {
+    const li = this.parentElement.children[0];
+    let arr = sessionStorage["projects"].split(",");
+    let indx = arr.filter((ar) => ar != li.textContent);
+    sessionStorage["projects"] = indx;
+    return;
+  }
+  sessionStorage.removeItem(itemKey);
+}
+function updateProjectStorage() {
+  const projects = document.querySelector(".list-projects").children;
+  const arr_proj = [];
+  Array.from(projects).forEach((p) => {
+    arr_proj.push(p.children[0].textContent);
+    p.addEventListener("click", btnActive);
+  });
+  sessionStorage["projects"] = arr_proj;
+}
+export { handleContent, updateProjectStorage, objNext7Days, validDate,removeStorageItem };
