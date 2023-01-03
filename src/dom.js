@@ -1,7 +1,7 @@
 import "./style.css";
 import createEl from "/src/createElements.js";
 import { storeContent_changeDate } from "/src/date-mod.js";
-import { btnActive} from '/src/index.js'
+import { btnActive } from "/src/index.js";
 const create = createEl();
 
 function removeStorageItem() {
@@ -68,13 +68,11 @@ function domEvents(btn) {
 function updateProjectStorage() {
   const projects = document.querySelector(".list-projects").children;
   const arr_proj = [];
-  Array.from(projects).forEach(p => {
+  Array.from(projects).forEach((p) => {
     arr_proj.push(p.children[0].textContent);
-    p.addEventListener("click", btnActive)
-    
+    p.addEventListener("click", btnActive);
   });
   sessionStorage["projects"] = arr_proj;
-  
 }
 function checkProjectTitle(btn) {
   const name = document.getElementById("name");
@@ -98,12 +96,12 @@ function addTask(btn) {
   const task = document.querySelector(".pop-up-card").children[0];
   const title = document.getElementById("title");
   if (title.value.length > 1 && title.value.length < 20) {
-    domCard(task.children);
+    newDomCard(task.children);
     hideElement(btn);
   }
 }
 
-function domCard(elChildren) {
+function newDomCard(elChildren) {
   const card_input = document.querySelector(".card-input");
   const container = document.querySelector(".card-container");
   const card = document.createElement("div");
@@ -194,4 +192,4 @@ function inputCard() {
   }
 }
 
-export { inputCard, domCard, newProject, addProject };
+export { inputCard, newDomCard, newProject, addProject };

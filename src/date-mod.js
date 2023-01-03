@@ -1,8 +1,8 @@
 const { format, parseISO, addDays, isBefore } = require("date-fns");
 
-function validDate(userDate,fromStorage) {
+function validDate(userDate, fromStorage) {
   const result = isBefore(parseISO(userDate), parseISO(todayDate()));
-  if (fromStorage == true){
+  if (fromStorage == true) {
     if (result == true) {
       return true;
     }
@@ -63,17 +63,17 @@ function elementToObj(elem) {
 
   function unnecessaryEls(el) {
     if (el.localName != "label" && el.localName != "button") {
-      if (el.id == "dueDate" || el.value.length > 1 ) {
+      if (el.id == "dueDate" || el.value.length > 1) {
         return el;
       }
-      
-      if(el.localName == "select" && el.children[0] != undefined){
-        if(el.children.length < 1){
-          return
+
+      if (el.localName == "select" && el.children[0] != undefined) {
+        if (el.children.length < 1) {
+          return;
         }
 
-        el.value = el[0].value
-        return el
+        el.value = el[0].value;
+        return el;
       }
     }
   }
@@ -108,7 +108,6 @@ function storeTask(contentObj, storeContent) {
 }
 
 function storeContent_changeDate(lst) {
-  
   let obj = elementToObj(lst);
 
   if (lst["stored"] == true) {
@@ -119,4 +118,4 @@ function storeContent_changeDate(lst) {
   storeTask(obj, true);
   return obj;
 }
-export {storeContent_changeDate, objNext7Days, validDate };
+export { storeContent_changeDate, objNext7Days, validDate };

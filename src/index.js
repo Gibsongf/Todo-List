@@ -1,12 +1,8 @@
 import "./style.css";
-import { inputCard, domCard, newProject, addProject} from "/src/dom.js";
+import { inputCard, newDomCard, newProject, addProject } from "/src/dom.js";
 import { objNext7Days, validDate } from "/src/date-mod.js";
 
-
 /* projects event listener */
-
-
-
 
 function eventCreateCard() {
   const addTask = document.querySelector(".add-task");
@@ -21,15 +17,14 @@ function sideBarProjects() {
   const keys = Object.keys(sessionStorage);
   if (!keys.includes("projects")) {
     sessionStorage["projects"] = ["Personal"];
-    addProject("Personal")
+    addProject("Personal");
   }
-  if(sessionStorage["projects"].length <1 ){
-    return
-  } 
-  else {
+  if (sessionStorage["projects"].length < 1) {
+    return;
+  } else {
     const all = sessionStorage["projects"].split(",");
     all.forEach((txt) => {
-      addProject(txt)
+      addProject(txt);
     });
   }
 }
@@ -41,7 +36,7 @@ function allTask() {
     if (isDue == true) {
       item["dueDate"] = "Due";
     }
-    domCard(item);
+    newDomCard(item);
   });
 }
 function showAll() {
@@ -56,7 +51,7 @@ function showNext7Days(e) {
   const allObjTasks = getAllTask();
   allObjTasks.forEach((item) => {
     const obj = objNext7Days();
-    
+
     if (obj.weekDaysKeys.includes(item["dueDate"])) {
       document
         .querySelector(".card-" + item["storageKey"])
@@ -99,56 +94,52 @@ function getAllTask() {
   }
   return allObjTasks;
 }
-function showProject(e){
+function showProject(e) {
   const allObjTasks = getAllTask();
   allObjTasks.forEach((item) => {
     /* console.log(item['projects'], item['projects'] == e, e) */
-    if(item['projects'] == e){
+    if (item["projects"] == e) {
       document
         .querySelector(".card-" + item["storageKey"])
         .setAttribute("style", "display:block");
-
-    }
-    else {
+    } else {
       document
         .querySelector(".card-" + item["storageKey"])
         .setAttribute("style", "display:none");
     }
-  })
+  });
 }
 
 function btnActive() {
   let current = document.getElementById("selected");
-  if (current != null){
+  if (current != null) {
     current.setAttribute("id", "");
   }
   this.setAttribute("id", "selected");
-  
-  
+
   const obj = {
-    'Today':showTodayTask,
-    'Next 7 Days':showNext7Days,
-    'All Tasks':showAll
+    Today: showTodayTask,
+    "Next 7 Days": showNext7Days,
+    "All Tasks": showAll,
+  };
+  if (Object.keys(obj).includes(this.textContent)) {
+    obj[this.textContent]();
+  } else {
+    showProject(this.children[0].textContent.toLowerCase());
   }
-  if(Object.keys(obj).includes(this.textContent)){
-    obj[this.textContent]()
-  }
-  else {
-    showProject(this.children[0].textContent.toLowerCase())
-  } 
 }
+
 sideBarProjects();
 eventCreateCard();
 eventCreateProject();
 allTask();
-/* need project delete */
 const today = document.querySelector(".today");
 today.addEventListener("click", btnActive);
 const nxt_seven_days = document.querySelector(".seven-days");
 nxt_seven_days.addEventListener("click", btnActive);
 const all_task = document.querySelector(".all-tasks");
 all_task.addEventListener("click", btnActive);
-const projects = Array.from(document.querySelector('.list-projects').children)
-projects.forEach(p => p.addEventListener("click", btnActive))
+const projects = Array.from(document.querySelector(".list-projects").children);
+projects.forEach((p) => p.addEventListener("click", btnActive));
 
-export { btnActive}
+export { btnActive };
