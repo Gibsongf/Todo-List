@@ -1,5 +1,5 @@
 import "./style.css";
-import { inputCard, domCard, newProject } from "/src/dom.js";
+import { inputCard, domCard, newProject, addProject} from "/src/dom.js";
 import { objNext7Days, validDate } from "/src/date-mod.js";
 
 
@@ -8,33 +8,30 @@ import { objNext7Days, validDate } from "/src/date-mod.js";
 
 
 
-function callCard() {
+function eventCreateCard() {
   const addTask = document.querySelector(".add-task");
-  addTask.addEventListener("click", () => {
-    inputCard();
-  });
+  addTask.addEventListener("click", inputCard);
 }
-function callProject() {
-  const addProject = document.querySelector(".add-project");
-  addProject.addEventListener("click", () => {
-    newProject();
-  });
+function eventCreateProject() {
+  const adProject = document.querySelector(".add-project");
+  adProject.addEventListener("click", newProject);
 }
 
 function sideBarProjects() {
-  const ul_projects = document.querySelector(".list-projects");
+  /* const ul_projects = document.querySelector(".list-projects"); */
   const keys = Object.keys(sessionStorage);
+  console.log(keys)
   if (!keys.includes("projects")) {
     sessionStorage["projects"] = ["Personal"];
-    const li = document.createElement("li");
-    li.textContent = "Personal";
-    ul_projects.appendChild(li);
-  } else {
+    addProject("Personal")
+  }
+  if(sessionStorage["projects"].length <1 ){
+    return
+  } 
+  else {
     const all = sessionStorage["projects"].split(",");
     all.forEach((txt) => {
-      const li = document.createElement("li");
-      li.textContent = txt;
-      ul_projects.appendChild(li);
+      addProject(txt)
     });
   }
 }
@@ -146,10 +143,10 @@ function showProject(e){
   })
 }
 sideBarProjects();
-callCard();
-callProject();
+eventCreateCard();
+eventCreateProject();
 allTask();
-
+/* need project delete */
 const today = document.querySelector(".today");
 today.addEventListener("click", btnActive);
 const nxt_seven_days = document.querySelector(".seven-days");

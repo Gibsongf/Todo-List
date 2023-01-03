@@ -1,4 +1,3 @@
-import { add } from "date-fns";
 import "./style.css";
 import createEl from "/src/createElements.js";
 import { storeContent_changeDate } from "/src/date-mod.js";
@@ -7,10 +6,24 @@ const create = createEl();
 
 function removeStorageItem() {
   const itemKey = this.parentElement.className.replace("card-", "");
+  if(this.parentElement.localName == 'li'){
+    const li = this.parentElement.children[0];
+    let arr = sessionStorage['projects'].split(',')
+    let indx = arr.filter(ar => ar != li.textContent)
+    sessionStorage['projects'] = indx
+    return
+  }
   sessionStorage.removeItem(itemKey);
 }
 function deleteElement() {
   const container = document.querySelector(".card-container");
+  const ul = document.querySelector('.list-projects')
+  console.log(this.parentElement.localName,)
+  if(this.parentElement.localName == 'li'){
+    const li = this.parentElement;
+    ul.removeChild(li);
+    return;
+  }
   if (this.textContent == "Delete") {
     const card = this.parentElement;
     container.removeChild(card);
@@ -56,7 +69,9 @@ function domEvents(btn) {
 function updateProjectStorage() {
   const projects = document.querySelector(".list-projects").children;
   const arr_proj = [];
-  Array.from(projects).forEach((p) => arr_proj.push(p.textContent));
+  Array.from(projects).forEach((p) => {
+    arr_proj.push(p.children[0].textContent)
+  });
   sessionStorage["projects"] = arr_proj;
 }
 function checkProjectTitle(btn){
@@ -70,9 +85,15 @@ function checkProjectTitle(btn){
 function addProject(txt) {
   const ul_projects = document.querySelector(".list-projects");
   const li = document.createElement("li");
-  li.textContent = txt;
+  const div = create.simple_el('div','',txt)
+  li.appendChild(div)
   ul_projects.appendChild(li);
   updateProjectStorage();
+  const btnDel = create.btn_creator([], "Delete");
+  li.appendChild(btnDel);
+  domEvents(btnDel);
+  
+
 }
 function addTask(btn) {
   const task = document.querySelector('.pop-up-card').children[0]
@@ -173,4 +194,4 @@ function inputCard() {
   }
 }
 
-export { inputCard, domCard, newProject };
+export { inputCard, domCard, newProject, addProject};

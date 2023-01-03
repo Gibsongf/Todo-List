@@ -82,7 +82,9 @@ function createEl() {
   }
   function simple_el(type, selector_name, innerContent) {
     const ell = document.createElement(type);
-    ell.className = selector_name;
+    if(selector_name.length > 1){
+      ell.className = selector_name;
+    }
     ell.textContent = innerContent;
     return ell;
   }
