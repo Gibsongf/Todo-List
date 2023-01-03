@@ -18,9 +18,7 @@ function eventCreateProject() {
 }
 
 function sideBarProjects() {
-  /* const ul_projects = document.querySelector(".list-projects"); */
   const keys = Object.keys(sessionStorage);
-  console.log(keys)
   if (!keys.includes("projects")) {
     sessionStorage["projects"] = ["Personal"];
     addProject("Personal")
@@ -75,9 +73,7 @@ function showTodayTask(e) {
   const allObjTasks = getAllTask();
   allObjTasks.forEach((item) => {
     const obj = objNext7Days();
-    /* console.log(obj,item) */
     if (obj.weekDaysKeys[0] != item["dueDate"]) {
-      console.log(item["storageKey"]);
       document
         .querySelector(".card-" + item["storageKey"])
         .setAttribute("style", "display:none");
@@ -94,7 +90,6 @@ function btnActive() {
   let current = document.getElementById("selected");
   if (current != null){
     current.setAttribute("id", "");
-    /* console.log(current) */
   }
   this.setAttribute("id", "selected");
   

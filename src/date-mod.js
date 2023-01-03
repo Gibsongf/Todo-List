@@ -64,7 +64,6 @@ function elementToObj(elem) {
   function unnecessaryEls(el) {
     if (el.localName != "label" && el.localName != "button") {
       if (el.id == "dueDate" || el.value.length > 1 ) {
-        console.log(el)
         return el;
       }
       if(el.localName == "select"){

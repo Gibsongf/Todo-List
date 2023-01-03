@@ -1,6 +1,3 @@
-/* const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]; */
-/* decide if will be week day in the card or the date number(MM-dd-yyyy) */
-
 
 function createEl() {
   const { format } = require("date-fns");
@@ -11,8 +8,7 @@ function createEl() {
     const input = document.createElement("input");
     input.type = "date";
     input.setAttribute("id", "dueDate");
-    input.min = currentDate; /* Here we use api to use today date */
-
+    input.min = currentDate; 
     arr.push(label);
     arr.push(input);
 
@@ -22,7 +18,6 @@ function createEl() {
     const label = document.createElement("label");
     let newName = contentName[0].toUpperCase()+contentName.slice(1)
     label.textContent = newName + ":";
-    /* label.setAttribute("id", contentName.toLowerCase()); */
     label.htmlFor = contentName.toLowerCase();
     return label;
   }
