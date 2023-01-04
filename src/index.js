@@ -41,7 +41,7 @@ function showAllTask() {
   allObjTasks.forEach((item) => {
     document
       .querySelector(".card-" + item["storageKey"])
-      .setAttribute("style", "display:block");
+      .style.display = '';
   });
 }
 function showNext7Days(e) {
@@ -52,7 +52,7 @@ function showNext7Days(e) {
     if (obj.weekDaysKeys.includes(item["dueDate"])) {
       document
         .querySelector(".card-" + item["storageKey"])
-        .setAttribute("style", "display:block");
+        .style.display = '';
     } else {
       document
         .querySelector(".card-" + item["storageKey"])
@@ -68,7 +68,7 @@ function showTodayTask(e) {
     if (obj.weekDaysKeys[0] != item["dueDate"]) {
       document
         .querySelector(".card-" + item["storageKey"])
-        .setAttribute("style", "display:none");
+        .style.display = '';
     } else {
       document
         .querySelector(".card-" + item["storageKey"])
