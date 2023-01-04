@@ -81,7 +81,14 @@ function addTask(btn) {
     hideElement(btn);
   }
 }
-
+function priorityColor(priority,el){
+  const colors = {
+    'high': 'red',
+    'mid': 'yellow',
+    'low': 'blue'
+  }
+  el.setAttribute('style','border-color:'+colors[priority])
+}
 function newDomCard(elChildren) {
   const card_input = document.querySelector(".card-input");
   const container = document.querySelector(".card-container");
@@ -93,10 +100,8 @@ function newDomCard(elChildren) {
     ["h1", "title", all_el["title"]],
     ["h3", "dueDate", all_el["dueDate"]],
     ["h3", "description", all_el["description"]],
-    
     ["h3", "priority", all_el["priority"]],
   ];
-  /* need a function that change the card color with the priority selected */
   els_info.forEach((item) => {
     const el = create.simple_el(item[0], item[1], item[2]);
     card.appendChild(el);
@@ -108,6 +113,7 @@ function newDomCard(elChildren) {
 
   const btnDel = create.btn_creator([], "Delete");
   card.appendChild(btnDel);
+  priorityColor(all_el["priority"],card)
   container.appendChild(card);
   domEvents(btnDel);
 }
