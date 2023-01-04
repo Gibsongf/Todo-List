@@ -19,7 +19,6 @@ function sideBarProjects() {
     return;
   } else {
     const all = sessionStorage["projects"].split(",");
-    console.log(all)
     all.forEach((txt) => {
       addProject(txt);
     

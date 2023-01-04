@@ -81,7 +81,17 @@ function addTask(btn) {
     hideElement(btn);
   }
 }
-
+function priorityColor(prioritySelected,el){
+  console.log(prioritySelected)
+  const colors = {
+    'high':'red',
+    'mid':'yellow',
+    'low':'blue'
+  }
+  if (prioritySelected.length > 1){
+      el.setAttribute('style','border-color:'+colors[prioritySelected])
+  }
+}
 function newDomCard(elChildren) {
   const card_input = document.querySelector(".card-input");
   const container = document.querySelector(".card-container");
@@ -108,6 +118,7 @@ function newDomCard(elChildren) {
 
   const btnDel = create.btn_creator([], "Delete");
   card.appendChild(btnDel);
+  priorityColor(all_el["priority"],card)
   container.appendChild(card);
   domEvents(btnDel);
 }
