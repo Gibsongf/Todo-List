@@ -1,6 +1,12 @@
 import "./style.css";
 import { inputCard, newDomCard, newProject, addProject } from "/src/dom.js";
 import { objNext7Days, validDate } from "/src/date-storage-mod.js";
+import Bullseye from '/src/imgs/bullseye.png'
+
+
+
+
+
 
 function sideBarProjects() {
   const keys = Object.keys(sessionStorage);
@@ -144,5 +150,14 @@ const menu = Array.from(document.querySelector('.menu').children)
 menu.forEach(opt => opt.addEventListener("click", btnActive))
 const projects = Array.from(document.querySelector(".list-projects").children);
 projects.forEach((p) => p.addEventListener("click", btnActive));
+
+function imgElement(imgSrc,name) {
+  const img = document.createElement("IMG");
+  img.className = name;
+  img.src = imgSrc; 
+  return img
+}
+/* const icon_Today = imgElement(Bullseye,'today-icon')
+menu[0].insertBefore(icon_Today, menu[0]) */
 
 export { btnActive };
