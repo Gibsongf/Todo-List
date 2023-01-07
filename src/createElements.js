@@ -1,7 +1,11 @@
+import delSrc from '/src/imgs/delete.png'
+import editSrc from '/src/imgs/edit.png'
+
+
 function createEl() {
   const { format } = require("date-fns");
   const currentDate = format(new Date(), "MM-dd-yyyy");
-
+  
   function dateInput(arr) {
     const label = htmlLabel("dueDate");
     const input = document.createElement("input");
@@ -24,12 +28,16 @@ function createEl() {
     const label = htmlLabel(name);
     const input = document.createElement("input");
     input.type = "text";
-    input.placeholder = pHolder;
+    name = name.replace(" ", "-").toLowerCase();
+    input.setAttribute("id", name);
+
+    if(pHolder.length > 1){
+      input.placeholder = pHolder;
+    }
     if (name == "title" || name == "name") {
       input.required = true;
     }
-    name = name.replace(" ", "-").toLowerCase();
-    input.setAttribute("id", name);
+
     arr.push(label);
     arr.push(input);
     return input;
@@ -54,6 +62,8 @@ function createEl() {
     arr.push(input);
     return input;
   }
+  
+  
   function projectsSelector(arr) {
     const label = htmlLabel("My Projects");
     const input = document.createElement("select");
@@ -72,10 +82,29 @@ function createEl() {
     const btnClose = document.createElement("button");
     const idName = txt.replace(txt[0], txt[0].toLowerCase());
     btnClose.textContent = txt;
-    btnClose.setAttribute("id", idName);
+    btnClose.className = idName ;
     arr.push(btnClose);
     return btnClose;
   }
+  
+  function btnImg (src,nameCl,nameID){
+    const img = document.createElement('input');
+    img.type = 'image'
+    img.src = src
+    img.className = nameCl
+    img.setAttribute('id',nameID)
+    return img
+  }
+
+  function btnEdit (){
+    return btnImg(editSrc,'edit','btn-img')
+  }
+
+  function btnDel (){
+    return btnImg(delSrc,'delete','btn-img')
+  }
+  
+
   function simple_el(type, selector_name, innerContent) {
     const ell = document.createElement(type);
     if (selector_name.length > 1) {
@@ -87,11 +116,15 @@ function createEl() {
   function popEl(name) {
     const content = document.getElementById("content");
     const popup = simple_el("div", "pop-up-" + name);
-    const popup_content = simple_el("div", "pop-up-content");
+    const popup_content = simple_el("div", "pop-up-content-" + name);
     content.appendChild(popup);
     popup.appendChild(popup_content);
+    popup.setAttribute('id','pop-up')
+    popup_content.setAttribute('id','pop-up-content')
     return popup_content;
   }
+
+  
 
   const everything = {
     simple_el,
@@ -103,6 +136,8 @@ function createEl() {
     htmlLabel,
     dateInput,
     projectsSelector,
+    btnDel,
+    btnEdit
   };
   return Object.assign({}, everything);
 }

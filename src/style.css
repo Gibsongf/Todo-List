@@ -25,7 +25,6 @@ ul {
     grid-template-columns: 250px 4fr ;
     grid-template-rows: 40px 1fr 1fr  ;
     
-    
 }
 .add-project{
     background-color: transparent;
@@ -80,7 +79,12 @@ ul {
 }
 
 
-.pop-up-card, .pop-up-project {
+
+#btn-img{
+    width: 40px;
+    height: 40px;
+}
+#pop-up {
     position: fixed; 
     z-index: 1; 
     padding-top: 50px; 
@@ -91,15 +95,26 @@ ul {
     background-color: rgb(0,0,0); 
     background-color: rgba(0,0,0,0.4); 
 }
-.pop-up-content {
+#pop-up-content{
     background-color: #fefefe;
-  margin: 15% auto; 
-  padding: 20px;
-  border: 1px solid #888;
-  width: 50%;
-  display: flex;
-  flex-direction: column;
+    margin: 15% auto; 
+    padding: 20px;
+    border: 5px solid rgb(28, 98, 131);
+    border-radius: 10px;
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
+button {
+    font-family: "main-font";
+    font-weight: bold;
+}
+input[type="text"]{
+    appearance: none;
+    border-radius: 15px;
+    background-color: #DFE6EE;
+  }
 .side-bar  ul > li:hover,#selected {
     background-color: #0e5d88;
 }
@@ -118,8 +133,8 @@ ul {
 .card-container div {
     border: solid black 5px;
     height: 250px;
+    overflow: hidden;
 }
-
 
 .add-task {
     grid-column: 2;

@@ -137,4 +137,13 @@ function updateProjectStorage() {
   });
   sessionStorage["projects"] = arr_proj;
 }
-export { handleContent, updateProjectStorage, objNext7Days, validDate,removeStorageItem };
+function updateStorage() {
+  const projects = document.querySelector(".list-projects").children;
+  const arr_proj = [];
+  Array.from(projects).forEach((p) => {
+    arr_proj.push(p.children[0].textContent);
+    p.addEventListener("click", btnActive);
+  });
+  sessionStorage["projects"] = arr_proj;
+}
+export { handleContent, updateProjectStorage, objNext7Days, validDate,removeStorageItem, elementToObj };

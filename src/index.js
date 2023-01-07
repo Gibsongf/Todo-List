@@ -1,12 +1,19 @@
 import "./style.css";
-import { inputCard, newDomCard, newProject, addProject } from "/src/dom.js";
+import { inputCard, newDomCard, newProject, addProject, editCard} from "/src/dom.js";
 import { objNext7Days, validDate } from "/src/date-storage-mod.js";
-import Bullseye from '/src/imgs/bullseye.png'
+import createEl from "/src/createElements.js";
+const create = createEl();
 
+function showEl(item) {
+  const toShow = document.querySelector(".card-" + item["storageKey"]);
+  toShow.setAttribute("style", "display:block");
+  priorityColor(item["priority"], toShow);
+}
 
-
-
-
+function hideEl(item) {
+  const toShow = document.querySelector(".card-" + item["storageKey"]);
+  toShow.setAttribute("style", "display:none");
+}
 
 function sideBarProjects() {
   const keys = Object.keys(sessionStorage);
@@ -14,7 +21,6 @@ function sideBarProjects() {
   if (!keys.includes("projects")) {
     sessionStorage["projects"] = ["Personal"];
     addProject("Personal");
-    console.log("20p");
     return;
   }
   if (sessionStorage["projects"].length < 1) {
@@ -45,17 +51,6 @@ function priorityColor(priority, el) {
     low: "blue",
   };
   el.setAttribute("style", "border-color:" + colors[priority]);
-}
-
-function showEl(item) {
-  const toShow = document.querySelector(".card-" + item["storageKey"]);
-  toShow.setAttribute("style", "display:block");
-  priorityColor(item["priority"], toShow);
-}
-
-function hideEl(item) {
-  const toShow = document.querySelector(".card-" + item["storageKey"]);
-  toShow.setAttribute("style", "display:none");
 }
 
 function showAllTask() {
@@ -104,6 +99,7 @@ function getAllTask() {
   }
   return allObjTasks;
 }
+
 function showProjectTasks(e) {
   const allObjTasks = getAllTask();
   allObjTasks.forEach((item) => {
@@ -127,8 +123,8 @@ function btnActive() {
     "Next 7 Days": showNext7Days,
     "All Tasks": showAllTask,
   };
-  if (Object.keys(obj).includes(this.textContent)) {
-    obj[this.textContent]();
+  if (Object.keys(obj).includes(this.innerText)) {
+    obj[this.innerText]();
   } else {
     showProjectTasks(this.children[0].textContent.toLowerCase());
   }
@@ -136,6 +132,12 @@ function btnActive() {
 
 sideBarProjects();
 allTask();
+/* let logoTwo = require('svg-inline-loader?classPrefix=my-prefix-!./imgs/pencil.svg');
+const test = document.getElementById('content')
+const parser = new DOMParser();
+const doc2 = parser.parseFromString(logoTwo, "image/svg+xml");
+doc2.documentElement.setAttribute('class','pencil')
+test.appendChild(doc2.documentElement) */
 
 const addTask = document.querySelector(".add-task");
 addTask.addEventListener("click", inputCard);
@@ -145,19 +147,15 @@ adProject.addEventListener("click", newProject);
 
 const all_task = document.querySelector(".all-tasks");
 all_task.setAttribute("id", "selected");
+all_task.addEventListener("click", btnActive)
 
 const menu = Array.from(document.querySelector('.menu').children)
-menu.forEach(opt => opt.addEventListener("click", btnActive))
+menu.forEach(i => i.addEventListener("click", btnActive))
 const projects = Array.from(document.querySelector(".list-projects").children);
 projects.forEach((p) => p.addEventListener("click", btnActive));
 
-function imgElement(imgSrc,name) {
-  const img = document.createElement("IMG");
-  img.className = name;
-  img.src = imgSrc; 
-  return img
-}
-/* const icon_Today = imgElement(Bullseye,'today-icon')
-menu[0].insertBefore(icon_Today, menu[0]) */
+/* const card = document.querySelector('.card-container').children
+Array.from(card).forEach(item => item.addEventListener('click',editCard)) */
+
 
 export { btnActive };
