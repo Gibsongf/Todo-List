@@ -121,7 +121,7 @@ function createEl() {
     popup.appendChild(popup_content);
     popup.setAttribute('id','pop-up')
     popup_content.setAttribute('id','pop-up-content')
-    return popup_content;
+    return {popup,popup_content};
   }
 
   

@@ -1,5 +1,5 @@
 import "./style.css";
-import { inputCard, newDomCard, newProject, addProject, editCard} from "/src/dom.js";
+import { inputCard, newDomCard, newProject, addProject, editCard,show_del_popup} from "/src/dom.js";
 import { objNext7Days, validDate } from "/src/date-storage-mod.js";
 import createEl from "/src/createElements.js";
 const create = createEl();
@@ -140,14 +140,13 @@ doc2.documentElement.setAttribute('class','pencil')
 test.appendChild(doc2.documentElement) */
 
 const addTask = document.querySelector(".add-task");
-addTask.addEventListener("click", inputCard);
+addTask.addEventListener("click", show_del_popup);
 
 const adProject = document.querySelector(".add-project");
-adProject.addEventListener("click", newProject);
+adProject.addEventListener("click", show_del_popup);
 
 const all_task = document.querySelector(".all-tasks");
 all_task.setAttribute("id", "selected");
-all_task.addEventListener("click", btnActive)
 
 const menu = Array.from(document.querySelector('.menu').children)
 menu.forEach(i => i.addEventListener("click", btnActive))

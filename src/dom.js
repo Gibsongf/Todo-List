@@ -51,12 +51,10 @@ function hideElement(e) {
 }
 
 function domEvents(btn) {
-  console.log(btn.className)
   if (btn.textContent == "Close") {
     btn.addEventListener("click", hideElement);
   }
   if (btn.textContent == "Add task") {
-    console.log(btn)
     btn.addEventListener("click", addTask);
   }
   if (btn.className == "delete") {
@@ -64,7 +62,7 @@ function domEvents(btn) {
     btn.addEventListener("click", removeStorageItem);
   }
   if (btn.className == "edit") {
-    btn.addEventListener("click", editTask);
+    btn.addEventListener("click", show_del_popup);
     
   }
   if (btn.textContent == "New project") {
@@ -145,46 +143,14 @@ function InputElsProject() {
   const allElements = [];
   create.txtInput("name", "", allElements);
   const btnClose = create.btn_creator(allElements, "Close");
-  const btnAddProject = create.btn_creator(allElements, "New project");
-  const popup_content = create.popEl("project");
-  allElements.forEach((el) => popup_content.appendChild(el));
-  return { allElements, btnClose, btnAddProject };
+  const btnAdd = create.btn_creator(allElements, "New project");
+  const two_popUp = create.popEl("project");
+  allElements.forEach((el) => two_popUp.popup_content.appendChild(el));
+  return {allElements, btnClose, btnAdd};
 }
 
-
-
-function defaultCardInput() {
-  const allElements = [];
-  DomCardInput(allElements)
-  const btnClose = create.btn_creator(allElements, "Close");
-  const btnAddTask = create.btn_creator(allElements, "Add task");
-  const popup_content = create.popEl("card");
-  allElements.forEach((el) => popup_content.appendChild(el));
-  return { allElements, btnClose, btnAddTask, popup_content };
-}
-
-function DomCardInput(allElements) {
-  const title = create.txtInput("title", "", allElements);
-  const description = create.txtInput("description", "", allElements);
-  const dueDate =create.dateInput(allElements);
-  const priority = create.priorityInput(allElements);
-  const projects = create.projectsSelector(allElements);
-  return {title, description, dueDate, priority, projects}
-}
-/* need new function for all card buttons
-  we will use image as button so( if del add )need to change 
-  and new function that delete the pop content of the card
-  or just check if one exist but is better create new one 
-  because the pop html will kind be connect to the card so
-  is better delete it.
-  and probably delete the current card if confirm was clicked
-  and a pop for confirm delete button
-  */
 function popupToEdit(e) {
-  /* const currentText = Array.from(this.children) */
-  console.log(e)
   const cardKey = e.parentElement.className.split('-')[1]
-  console.log(cardKey)
   const allElements = [];
   const allinputs = DomCardInput(allElements)
   const obj = JSON.parse(sessionStorage[cardKey])
@@ -197,53 +163,75 @@ function popupToEdit(e) {
   })
   
   const btnClose = create.btn_creator(allElements, "Close");
-  const btnConfirm = create.btn_creator(allElements, "Confirm");
-  const popup_content = create.popEl("edit");
-  allElements.forEach((el) => popup_content.appendChild(el));
-  return {btnClose, btnConfirm}
-
-}
-function clearInputFields(popContent) {
-  const t = Array.from(popContent.children);
-  t.forEach((i) => (i.value = ""));
+  const btnAdd = create.btn_creator(allElements, "Confirm");
+  const two_popUp = create.popEl("edit");
+  allElements.forEach((el) => two_popUp.popup_content.appendChild(el));
+  return {btnClose, btnAdd}
 }
 
-function updateSelectorOptions() {
-  let parent = document.querySelector(".pop-up-content-card");
-  let child = document.getElementById("projects");
-  let newChild = create.projectsSelector([]);
-  parent.replaceChild(newChild, child);
+function defaultCardInput() {
+  const allElements = [];
+  DomCardInput(allElements)
+  const btnClose = create.btn_creator(allElements, "Close");
+  const btnAdd = create.btn_creator(allElements, "Add task");
+  const two_popUp = create.popEl("card");
+  allElements.forEach((el) => two_popUp.popup_content.appendChild(el));
+  return {btnClose, btnAdd, two_popUp};
 }
-function inputCard() {
-  const hasPop = document.querySelector(".pop-up-card");
-  if (hasPop != null) {
-    hasPop.setAttribute("style", "display: block;");
-    clearInputFields(hasPop.children[0]);
-    updateSelectorOptions();
-  } else {
-    const inputs = defaultCardInput();
-    domEvents(inputs.btnClose);
-    domEvents(inputs.btnAddTask);
-    clearInputFields(inputs.popup_content);
-  }
+
+function DomCardInput(allElements) {
+  const title = create.txtInput("title", "", allElements);
+  const description = create.txtInput("description", "", allElements);
+  const dueDate =create.dateInput(allElements);
+  const priority = create.priorityInput(allElements);
+  const projects = create.projectsSelector(allElements);
+  return {title, description, dueDate, priority, projects}
 }
-function newProject() {
-  const hasPop = document.querySelector(".pop-up-project");
-  if (hasPop != null) {
-    hasPop.setAttribute("style", "display: block;");
-    clearInputFields(hasPop.children[0]);
-  } else {
-    const inputs = InputElsProject();
-    domEvents(inputs.btnClose);
-    domEvents(inputs.btnAddProject);
-  }
-}
+
+
 /* i think we can make this function the main one to create and del the pop-ups */
+function show_del_popup() {
+  const btnClicked = this;
+  const keyName = this.className
+
+  const obj = {
+    'edit':[popupToEdit, "edit"],
+    'add-project': [InputElsProject, "project"],
+    'add-task':[defaultCardInput, "card"]
+  }
+  console.log(this,this.className)
+  function showPop(){
+    delPop(obj[keyName][1])
+    if(keyName == 'edit'){
+      const inputs = obj[keyName][0](btnClicked)
+      domEvents(inputs.btnClose);
+      domEvents(inputs.btnAdd);
+    }
+    else {
+      const inputs = obj[keyName][0]();
+      domEvents(inputs.btnClose);
+      domEvents(inputs.btnAdd);
+    }
+    
+  }
+  function delPop(popName){
+    const hasPop = document.querySelector(".pop-up-"+popName);
+    if (hasPop != null) {
+      hasPop.parentElement.removeChild(hasPop) 
+    }
+  }
+  showPop()
+  
+ 
+}
+
 function editTask() {
+  const btnClicked = this;
+  console.log(this.className)
   function createPopEdit(){
-    const inputs = popupToEdit(this);
+    const inputs = popupToEdit(btnClicked);
     domEvents(inputs.btnClose);
-    domEvents(inputs.btnConfirm);
+    domEvents(inputs.btnAdd);
   }
   const hasPop = document.querySelector(".pop-up-edit");
   if (hasPop != null) {
@@ -251,8 +239,8 @@ function editTask() {
     createPopEdit()
 
   } else {
-    createPopEdit() 
+    createPopEdit()
   }
 }
 
-export { inputCard, newDomCard, newProject, addProject, popupToEdit as editCard};
+export {newDomCard, addProject, popupToEdit as editCard,show_del_popup};
