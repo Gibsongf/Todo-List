@@ -40,8 +40,10 @@ ul {
     padding: 15px;
 
 } */
-.projects > h4:hover , .add-project:hover {
+.projects > h4:hover , .add-project:hover,#project-icon-color:hover {
     background-color: #0e5d88;
+    fill: aqua;
+
 }
 
 .side-bar {
@@ -67,10 +69,15 @@ ul {
     padding: 15px;
 }
 
-.projects {
-    display: grid;
-    grid-template-rows: 50px 10%;
+
+.list-projects li{
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    align-items: center;
+    padding: 15px;
 }
+
 .user-name {
     grid-row: 1;
 
@@ -81,8 +88,8 @@ ul {
 }
 
 #btn-img{
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
 }
 #pop-up {
     position: fixed; 

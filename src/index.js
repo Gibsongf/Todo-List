@@ -70,7 +70,7 @@ function showNext7Days() {
   });
 }
 
-function showTodayTask(e) {
+function showTodayTask() {
   const allObjTasks = getAllTask();
   allObjTasks.forEach((item) => {
     const obj = objNext7Days();
@@ -116,7 +116,7 @@ function btnActive() {
   this.setAttribute("id", "selected");
 
   const obj = {
-    Today: showTodayTask,
+    'Today': showTodayTask,
     "Next 7 Days": showNext7Days,
     "All Tasks": showAllTask,
   };
@@ -137,17 +137,11 @@ addTask.addEventListener("click", show_del_popup);
 const adProject = document.querySelector(".add-project");
 adProject.addEventListener("click", show_del_popup);
 
-const all_task = document.querySelector(".all-tasks");
-all_task.setAttribute("id", "selected");
-
 const menu = Array.from(document.querySelector('.menu').children)
 menu.forEach(i => i.addEventListener("click", btnActive))
 
 const projects = Array.from(document.querySelector(".list-projects").children).slice(1);
 projects.forEach((p) => p.addEventListener("click", btnActive));
-
-/* const card = document.querySelector('.card-container').children
-Array.from(card).forEach(item => item.addEventListener('click',editCard)) */
 
 
 export { btnActive };
