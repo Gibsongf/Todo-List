@@ -1,4 +1,6 @@
-import delSrc from '/src/imgs/delete.png'
+import delSrcBlack from '/src/imgs/delete.png'
+import delSrcWhite from '/src/imgs/delete-white.png'
+
 import editSrc from '/src/imgs/edit.png'
 
 
@@ -20,6 +22,9 @@ function createEl() {
   function htmlLabel(contentName) {
     const label = document.createElement("label");
     let newName = contentName[0].toUpperCase() + contentName.slice(1);
+    if (contentName == "title" || contentName == "name") {
+      newName = '* '+newName
+    }
     label.textContent = newName + ":";
     label.htmlFor = contentName.toLowerCase();
     return label;
@@ -71,7 +76,7 @@ function createEl() {
 
     const projects = Array.from(
       document.querySelector(".list-projects").children
-    );
+    ).slice(1);
     projects.forEach((li) => selectOption(li.children[0].textContent, input));
 
     arr.push(label);
@@ -100,8 +105,11 @@ function createEl() {
     return btnImg(editSrc,'edit','btn-img')
   }
 
-  function btnDel (){
-    return btnImg(delSrc,'delete','btn-img')
+  function btnDel (color){
+    if(color){
+      return btnImg(delSrcWhite,'delete','btn-img')
+    }
+    return btnImg(delSrcBlack,'delete','btn-img')
   }
   
 

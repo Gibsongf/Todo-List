@@ -129,9 +129,9 @@ function removeStorageItem() {
   sessionStorage.removeItem(itemKey);
 }
 function updateProjectStorage() {
-  const projects = document.querySelector(".list-projects").children;
+  const projects = Array.from(document.querySelector(".list-projects").children).slice(1);
   const arr_proj = [];
-  Array.from(projects).forEach((p) => {
+  projects.forEach((p) => {
     arr_proj.push(p.children[0].textContent);
     p.addEventListener("click", btnActive);
   });

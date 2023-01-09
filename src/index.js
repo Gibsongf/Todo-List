@@ -1,8 +1,6 @@
 import "./style.css";
-import { inputCard, newDomCard, newProject, addProject, editCard,show_del_popup} from "/src/dom.js";
-import { objNext7Days, validDate } from "/src/date-storage-mod.js";
-import createEl from "/src/createElements.js";
-const create = createEl();
+import {newDomCard, addProject, show_del_popup} from "/src/dom.js";
+import {objNext7Days, validDate} from "/src/date-storage-mod.js";
 
 function showEl(item) {
   const toShow = document.querySelector(".card-" + item["storageKey"]);
@@ -60,11 +58,10 @@ function showAllTask() {
   });
 }
 
-function showNext7Days(e) {
+function showNext7Days() {
   const allObjTasks = getAllTask();
   allObjTasks.forEach((item) => {
     const obj = objNext7Days();
-
     if (obj.weekDaysKeys.includes(item["dueDate"])) {
       showEl(item);
     } else {
@@ -132,12 +129,7 @@ function btnActive() {
 
 sideBarProjects();
 allTask();
-/* let logoTwo = require('svg-inline-loader?classPrefix=my-prefix-!./imgs/pencil.svg');
-const test = document.getElementById('content')
-const parser = new DOMParser();
-const doc2 = parser.parseFromString(logoTwo, "image/svg+xml");
-doc2.documentElement.setAttribute('class','pencil')
-test.appendChild(doc2.documentElement) */
+
 
 const addTask = document.querySelector(".add-task");
 addTask.addEventListener("click", show_del_popup);
@@ -150,7 +142,8 @@ all_task.setAttribute("id", "selected");
 
 const menu = Array.from(document.querySelector('.menu').children)
 menu.forEach(i => i.addEventListener("click", btnActive))
-const projects = Array.from(document.querySelector(".list-projects").children);
+
+const projects = Array.from(document.querySelector(".list-projects").children).slice(1);
 projects.forEach((p) => p.addEventListener("click", btnActive));
 
 /* const card = document.querySelector('.card-container').children
@@ -158,3 +151,11 @@ Array.from(card).forEach(item => item.addEventListener('click',editCard)) */
 
 
 export { btnActive };
+
+
+/* let logoTwo = require('svg-inline-loader?classPrefix=my-prefix-!./imgs/pencil.svg');
+const test = document.getElementById('content')
+const parser = new DOMParser();
+const doc2 = parser.parseFromString(logoTwo, "image/svg+xml");
+doc2.documentElement.setAttribute('class','pencil')
+test.appendChild(doc2.documentElement) */

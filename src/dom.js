@@ -54,20 +54,33 @@ function domEvents(btn) {
   if (btn.textContent == "Close") {
     btn.addEventListener("click", hideElement);
   }
+
   if (btn.textContent == "Add task") {
     btn.addEventListener("click", addTask);
   }
+
+  if (btn.textContent == "Confirm") {
+    btn.addEventListener("click", clickDel); 
+    btn.addEventListener('click', addEdit)
+  }
+
+  if (btn.textContent == "New project") {
+    btn.addEventListener("click", checkProjectTitle);
+  }
+
   if (btn.className == "delete") {
     btn.addEventListener("click", deleteElement);
     btn.addEventListener("click", removeStorageItem);
   }
   if (btn.className == "edit") {
     btn.addEventListener("click", show_del_popup);
-    
   }
-  if (btn.textContent == "New project") {
-    btn.addEventListener("click", checkProjectTitle);
-  }
+  
+}
+function clickDel(){
+  const key = this.id.split('-')[1]
+  const task = document.querySelector('.card-'+key)
+  task.children[4].click()
 }
 
 function checkProjectTitle(btn) {
@@ -86,14 +99,24 @@ function addProject(txt) {
   ul_projects.appendChild(li);
   updateProjectStorage();
 
-  const btnDel = create.btn_creator([], "Delete");
+  const btnDel = create.btnDel(true);
   li.appendChild(btnDel);
   domEvents(btnDel);
 }
+function addEdit(btn) {
+  console.log(btn)
+  const task = document.querySelector(".pop-up-content-edit");
+  const title = task.children[1];
+  if (title.value.length > 1 ) {
+    newDomCard(task.children);
+    hideElement(btn);
+  }
+}
 function addTask(btn) {
+  console.log(btn)
   const task = document.querySelector(".pop-up-content-card");
-  const title = document.getElementById("title");
-  if (title.value.length > 1 && title.value.length < 20) {
+  const title = task.children[1];
+  if (title.value.length > 1 ) {
     newDomCard(task.children);
     hideElement(btn);
   }
@@ -155,7 +178,6 @@ function popupToEdit(e) {
   const allinputs = DomCardInput(allElements)
   const obj = JSON.parse(sessionStorage[cardKey])
 
-  console.log(obj)
   Object.keys(obj).forEach(key =>{
     if(key != "stored" && key != "storageKey" ){
       allinputs[key].value = obj[key]
@@ -164,6 +186,7 @@ function popupToEdit(e) {
   
   const btnClose = create.btn_creator(allElements, "Close");
   const btnAdd = create.btn_creator(allElements, "Confirm");
+  btnAdd.setAttribute('id','key-'+cardKey)
   const two_popUp = create.popEl("edit");
   allElements.forEach((el) => two_popUp.popup_content.appendChild(el));
   return {btnClose, btnAdd}
@@ -180,8 +203,8 @@ function defaultCardInput() {
 }
 
 function DomCardInput(allElements) {
-  const title = create.txtInput("title", "", allElements);
-  const description = create.txtInput("description", "", allElements);
+  const title = create.txtInput("title", "min 2 characters", allElements);
+  const description = create.txtInput("description", "min 2 characters", allElements);
   const dueDate =create.dateInput(allElements);
   const priority = create.priorityInput(allElements);
   const projects = create.projectsSelector(allElements);
@@ -189,7 +212,6 @@ function DomCardInput(allElements) {
 }
 
 
-/* i think we can make this function the main one to create and del the pop-ups */
 function show_del_popup() {
   const btnClicked = this;
   const keyName = this.className
@@ -199,7 +221,6 @@ function show_del_popup() {
     'add-project': [InputElsProject, "project"],
     'add-task':[defaultCardInput, "card"]
   }
-  console.log(this,this.className)
   function showPop(){
     delPop(obj[keyName][1])
     if(keyName == 'edit'){
@@ -224,23 +245,9 @@ function show_del_popup() {
   
  
 }
+/* btn to confirm that the task was done */
+/* we could create this whole shit with every time a task is created 
+in one whole module or class i don't know this look like a spaghetti code */
 
-function editTask() {
-  const btnClicked = this;
-  console.log(this.className)
-  function createPopEdit(){
-    const inputs = popupToEdit(btnClicked);
-    domEvents(inputs.btnClose);
-    domEvents(inputs.btnAdd);
-  }
-  const hasPop = document.querySelector(".pop-up-edit");
-  if (hasPop != null) {
-    hasPop.parentElement.removeChild(hasPop)
-    createPopEdit()
 
-  } else {
-    createPopEdit()
-  }
-}
-
-export {newDomCard, addProject, popupToEdit as editCard,show_del_popup};
+export {newDomCard, addProject, show_del_popup};
