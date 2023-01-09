@@ -244,8 +244,6 @@ function show_del_popup() {
   }
   showPop();
 }
-/* btn to confirm that the task was done */
-/* we could create this whole shit with every time a task is 
-created in one whole module or class i don't know this look like a spaghetti code */
+
 
 export { newDomCard, addProject, show_del_popup };
