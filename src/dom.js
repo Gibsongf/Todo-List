@@ -51,7 +51,7 @@ function domEvents(btn) {
     return
   } 
   if (typeof obj[btnName] == "object") {
-    obj[btnName].forEach((doIt) => btn.addEventListener("click", doIt));
+    obj[btnName].forEach(doIt => btn.addEventListener("click", doIt));
     return;
   } 
   else {
@@ -62,7 +62,8 @@ function domEvents(btn) {
 function clickDel() {
   const key = this.id.split("-")[1];
   const task = document.querySelector(".card-" + key);
-  task.children[4].click();
+  console.log(task.children)
+  task.children[3].click();
 }
 
 function addProject(txt) {
@@ -89,7 +90,7 @@ function addContent(btn) {
       hideElement(task.parentElement);
     }
   }
-  if (title.length > 1 && btnParent != "project" && title.length < 25) {
+  if (title.length > 1 && btnParent != "project" && title.length < 15) {
     newDomCard(task.children);
     hideElement(task.parentElement);
   }
@@ -98,7 +99,7 @@ function priorityColor(priority, el) {
   const colors = {
     'high': "red",
     'mid': "yellow",
-    'low': "blue",
+    'low': "#0cdfd5",
   };
   el.setAttribute("style", "border-color:" + colors[priority]);
 }
@@ -108,12 +109,12 @@ function newDomCard(elChildren) {
   const card = document.createElement("div");
   let all_el = handleContent(elChildren);
   card.className = "card-" + all_el["storageKey"];
-
+  card.setAttribute('id','task-holder')
   const els_info = [
-    ["h1", "title", all_el["title"]],
+    ["h2", "title", all_el["title"]],
     ["h3", "dueDate", all_el["dueDate"]],
     ["h3", "description", all_el["description"]],
-    ["h3", "priority", all_el["priority"]],
+    
   ];
 
   els_info.forEach((item) => {
@@ -126,8 +127,10 @@ function newDomCard(elChildren) {
   }
   const btnDel = create.btnDel();
   const btnEdit = create.btnEdit();
-  card.appendChild(btnDel);
-  card.appendChild(btnEdit);
+  const btn = create.simple_el('div','btn-card-container');
+  btn.appendChild(btnDel)
+  btn.appendChild(btnEdit)
+  card.appendChild(btn);
   priorityColor(all_el["priority"], card);
   container.appendChild(card);
   domEvents(btnDel);

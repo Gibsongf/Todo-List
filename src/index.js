@@ -46,7 +46,7 @@ function priorityColor(priority, el) {
   const colors = {
     high: "red",
     mid: "yellow",
-    low: "blue",
+    low: "#0cdfd5",
   };
   el.setAttribute("style", "border-color:" + colors[priority]);
 }
