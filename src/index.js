@@ -1,6 +1,6 @@
 import "./style.css";
-import {newDomCard, addProject, show_del_popup} from "/src/dom.js";
-import {objNext7Days, validDate} from "/src/date-storage-mod.js";
+import { newDomCard, addProject, show_del_popup } from "/src/dom.js";
+import { objNext7Days, validDate } from "/src/date-storage-mod.js";
 
 function showEl(item) {
   const toShow = document.querySelector(".card-" + item["storageKey"]);
@@ -14,17 +14,17 @@ function hideEl(item) {
 }
 
 function sideBarProjects() {
-  const keys = Object.keys(sessionStorage);
+  const keys = Object.keys(localStorage);
 
   if (!keys.includes("projects")) {
-    sessionStorage["projects"] = ["Personal"];
+    localStorage["projects"] = ["Personal"];
     addProject("Personal");
     return;
   }
-  if (sessionStorage["projects"].length < 1) {
+  if (localStorage["projects"].length < 1) {
     return;
   } else {
-    const all = sessionStorage["projects"].split(",");
+    const all = localStorage["projects"].split(",");
     all.forEach((txt) => {
       addProject(txt);
     });
@@ -44,9 +44,9 @@ function allTask() {
 
 function priorityColor(priority, el) {
   const colors = {
-    high: "red",
-    mid: "yellow",
-    low: "#0cdfd5",
+    'high': "red",
+    'mid': "yellow",
+    'low': "#0cdfd5",
   };
   el.setAttribute("style", "border-color:" + colors[priority]);
 }
@@ -84,13 +84,13 @@ function showTodayTask() {
 
 function getAllTask() {
   let allObjTasks = [];
-  for (let i of Object.keys(sessionStorage)) {
+  for (let i of Object.keys(localStorage)) {
     if (
       i != "IsThisFirstTime_Log_From_LiveServer" &&
       i != "objKey" &&
       i != "projects"
     ) {
-      let obj = sessionStorage.getItem(i);
+      let obj = localStorage.getItem(i);
       allObjTasks.push(JSON.parse(obj));
     }
   }
@@ -147,9 +147,3 @@ projects.forEach((p) => p.addEventListener("click", btnActive));
 export { btnActive };
 
 
-/* let logoTwo = require('svg-inline-loader?classPrefix=my-prefix-!./imgs/pencil.svg');
-const test = document.getElementById('content')
-const parser = new DOMParser();
-const doc2 = parser.parseFromString(logoTwo, "image/svg+xml");
-doc2.documentElement.setAttribute('class','pencil')
-test.appendChild(doc2.documentElement) */

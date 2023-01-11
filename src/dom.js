@@ -15,7 +15,7 @@ function deleteElement() {
     ul.removeChild(li);
     return;
   } else {
-    const card = this.parentElement;
+    const card = this.parentElement.parentElement;
     container.removeChild(card);
     return;
   }
@@ -28,7 +28,7 @@ function hideElement(e) {
 }
 
 function domEvents(btn) {
-  
+
   const obj = {
     'Close': hideElement,
     "Add task": addContent,
@@ -37,6 +37,15 @@ function domEvents(btn) {
     'delete': [deleteElement, removeStorageItem],
     'edit': show_del_popup,
   };
+  function checkParentEl() {
+    if (btn.parentElement.parentElement.parentElement.id == 'content') {
+      obj[btnName](btn.parentElement.parentElement)
+    }
+    else {
+      obj[btnName](btn.parentElement.parentElement.parentElement);
+    }
+  }
+
   let btnName = "";
   if (Object.keys(obj).includes(btn.textContent)) {
     btnName = btn.textContent;
@@ -45,15 +54,13 @@ function domEvents(btn) {
     btnName = btn.className;
   }
   if (btnName == "Close") {
-    btn.addEventListener("click", () => {
-      obj[btnName](btn.parentElement.parentElement.parentElement);
-    });
+    btn.addEventListener("click", checkParentEl);
     return
-  } 
+  }
   if (typeof obj[btnName] == "object") {
     obj[btnName].forEach(doIt => btn.addEventListener("click", doIt));
     return;
-  } 
+  }
   else {
     btn.addEventListener("click", obj[btnName]);
     return;
@@ -62,17 +69,34 @@ function domEvents(btn) {
 function clickDel() {
   const key = this.id.split("-")[1];
   const task = document.querySelector(".card-" + key);
-  console.log(task.children)
-  task.children[3].click();
+  const delBtn = task.children[3].children[0]
+  delBtn.click();
+}
+function warn_limit_project() {
+  const ul_projects = document.querySelector(".list-projects");
+  if (ul_projects.children.length >= 6) {
+    const warning = create.popEl("warning");
+    const txt = create.simple_el('h2', '', 'Limit of projects are 5')
+    const btnClose = create.btn_creator([], "Close");
+    warning.popup_content.appendChild(txt)
+    warning.popup_content.appendChild(btnClose)
+    domEvents(btnClose)
+    return true
+  }
 }
 
 function addProject(txt) {
+  const limit = warn_limit_project()
+  if (limit == true) {
+    return
+  }
   const ul_projects = document.querySelector(".list-projects");
   const li = document.createElement("li");
   const div = create.simple_el("div", "", txt);
 
   li.appendChild(div);
   ul_projects.appendChild(li);
+
   updateProjectStorage();
 
   const btnDel = create.btnDel(true);
@@ -109,12 +133,12 @@ function newDomCard(elChildren) {
   const card = document.createElement("div");
   let all_el = handleContent(elChildren);
   card.className = "card-" + all_el["storageKey"];
-  card.setAttribute('id','task-holder')
+  card.setAttribute('id', 'task-holder')
   const els_info = [
     ["h2", "title", all_el["title"]],
     ["h3", "dueDate", all_el["dueDate"]],
     ["h3", "description", all_el["description"]],
-    
+
   ];
 
   els_info.forEach((item) => {
@@ -127,7 +151,7 @@ function newDomCard(elChildren) {
   }
   const btnDel = create.btnDel();
   const btnEdit = create.btnEdit();
-  const btn = create.simple_el('div','btn-card-container');
+  const btn = create.simple_el('div', 'btn-card-container');
   btn.appendChild(btnDel)
   btn.appendChild(btnEdit)
   card.appendChild(btn);
@@ -138,22 +162,22 @@ function newDomCard(elChildren) {
 
   /* this avoid the card showing at the wrong place when created*/
   const selectID = document.getElementById("selected");
-  if(selectID == null){
+  if (selectID == null) {
     const all = document.querySelector('.all-tasks')
-    all.setAttribute('id','selected')
+    all.setAttribute('id', 'selected')
     all.click();
   }
-  else{
+  else {
     selectID.click();
   }
 }
-function btn_Container(btnAddName){
-  const btnContainer = create.simple_el('div','btn-container')
+function btn_Container(btnAddName) {
+  const btnContainer = create.simple_el('div', 'btn-container')
   const btnClose = create.btn_creator([], "Close");
   const btnAdd = create.btn_creator([], btnAddName);
   btnContainer.appendChild(btnClose)
   btnContainer.appendChild(btnAdd)
-  return {btnContainer, btnClose, btnAdd}
+  return { btnContainer, btnClose, btnAdd }
 }
 function InputElsProject() {
   const allElements = [];
@@ -166,10 +190,10 @@ function InputElsProject() {
 }
 
 function popupToEdit(e) {
-  const cardKey = e.parentElement.className.split("-")[1];
+  const cardKey = e.parentElement.parentElement.className.split('-')[1];
   const allElements = [];
   const all_inputs = DomCardInput(allElements);
-  const obj = JSON.parse(sessionStorage[cardKey]);
+  const obj = JSON.parse(localStorage[cardKey]);
 
   Object.keys(obj).forEach((key) => {
     if (key != "stored" && key != "storageKey") {
@@ -181,7 +205,7 @@ function popupToEdit(e) {
   const two_popUp = create.popEl("edit");
   allElements.forEach((el) => two_popUp.popup_content.appendChild(el));
   two_popUp.popup_content.appendChild(btn.btnContainer)
-  return btn ;
+  return btn;
 }
 
 function defaultCardInput() {
@@ -191,7 +215,7 @@ function defaultCardInput() {
   const two_popUp = create.popEl("card");
   allElements.forEach((el) => two_popUp.popup_content.appendChild(el));
   two_popUp.popup_content.appendChild(btn.btnContainer)
-  return btn ;
+  return btn;
 }
 
 function DomCardInput(allElements) {
@@ -224,7 +248,6 @@ function show_del_popup() {
     delPop(keyName);
     if (keyName == "edit") {
       const inputs = obj[keyName](btnClicked);
-      console.log(inputs)
       domEvents(inputs.btnClose);
       domEvents(inputs.btnAdd);
     } else {

@@ -28,7 +28,7 @@ function objNext7Days() {
     let ad = addDays(parseISO(currentDay), n);
     let arr_date = format(new Date(ad), "yyyy-MM-dd EEEE").split(" ");
     dateDict[arr_date[0]] = arr_date[1];
-   
+
   }
   let weekDaysKeys = Object.keys(dateDict);
   dateDict[weekDaysKeys[0]] = "Today";
@@ -79,15 +79,15 @@ function elementToObj(elem) {
 }
 
 function createKey_storeContent(contentObj) {
-  let newKeyNumber = sessionStorage.getItem("objKey");
+  let newKeyNumber = localStorage.getItem("objKey");
   if (typeof newKeyNumber != "string") {
-    sessionStorage.setItem("objKey", 0);
+    localStorage.setItem("objKey", 0);
   } else {
-    sessionStorage.setItem("objKey", ++newKeyNumber);
+    localStorage.setItem("objKey", ++newKeyNumber);
   }
-  contentObj["storageKey"] = sessionStorage["objKey"];
+  contentObj["storageKey"] = localStorage["objKey"];
   contentObj["stored"] = true;
-  sessionStorage[sessionStorage["objKey"]] = JSON.stringify(contentObj);
+  localStorage[localStorage["objKey"]] = JSON.stringify(contentObj);
 }
 
 function storeTask(contentObj, storeContent) {
@@ -118,15 +118,15 @@ function handleContent(lst) {
 }
 
 function removeStorageItem() {
-  const itemKey = this.parentElement.className.replace("card-", "");
   if (this.parentElement.localName == "li") {
     const li = this.parentElement.children[0];
-    let arr = sessionStorage["projects"].split(",");
+    let arr = localStorage["projects"].split(",");
     let indx = arr.filter((ar) => ar != li.textContent);
-    sessionStorage["projects"] = indx;
+    localStorage["projects"] = indx;
     return;
   }
-  sessionStorage.removeItem(itemKey);
+  const itemKey = this.parentElement.parentElement.className.replace("card-", "");
+  localStorage.removeItem(itemKey);
 }
 function updateProjectStorage() {
   const projects = Array.from(document.querySelector(".list-projects").children).slice(1);
@@ -135,15 +135,7 @@ function updateProjectStorage() {
     arr_proj.push(p.children[0].textContent);
     p.addEventListener("click", btnActive);
   });
-  sessionStorage["projects"] = arr_proj;
+  localStorage["projects"] = arr_proj;
 }
-function updateStorage() {
-  const projects = document.querySelector(".list-projects").children;
-  const arr_proj = [];
-  Array.from(projects).forEach((p) => {
-    arr_proj.push(p.children[0].textContent);
-    p.addEventListener("click", btnActive);
-  });
-  sessionStorage["projects"] = arr_proj;
-}
-export { handleContent, updateProjectStorage, objNext7Days, validDate,removeStorageItem, elementToObj };
+
+export { handleContent, updateProjectStorage, objNext7Days, validDate, removeStorageItem, elementToObj };
