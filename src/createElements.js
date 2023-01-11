@@ -70,10 +70,9 @@ function createEl() {
   
   
   function projectsSelector(arr) {
-    const label = htmlLabel("My Projects");
+    const label = htmlLabel("Projects");
     const input = document.createElement("select");
     input.setAttribute("id", "projects");
-
     const projects = Array.from(
       document.querySelector(".list-projects").children
     ).slice(1);

@@ -60,7 +60,7 @@ function elementToObj(elem) {
   arr.forEach((item) => (obj[item.id] = item.value));
 
   function unnecessaryEls(el) {
-    if (el.localName != "label" && el.localName != "button") {
+    if (el.localName != "label" && el.localName != "div") {
       if (el.id == "dueDate" || el.value.length > 1) {
         return el;
       }

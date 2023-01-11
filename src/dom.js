@@ -21,34 +21,14 @@ function deleteElement() {
   }
 }
 function hideElement(e) {
-  const arr = [
-    "pop-up-card",
-    "pop-up-project",
-    "pop-up-edit",
-    "pop-up-content-project",
-    "pop-up-content-card",
-    "pop-up-content-edit",
-  ];
-  if (e.srcElement == undefined) {
-    e.srcElement = e;
-  }
-  if (arr.includes(e.srcElement.parentElement.className)) {
-    e.srcElement.parentElement.parentElement.setAttribute(
-      "style",
-      "display: none;"
-    );
-    return;
-  }
-  if (arr.includes(e.srcElement.parentElement.className)) {
-    e.srcElement.parentElement.parentElement.setAttribute(
-      "style",
-      "display: none;"
-    );
-    return;
-  }
+  e.setAttribute(
+    "style",
+    "display: none;"
+  );
 }
 
 function domEvents(btn) {
+  
   const obj = {
     'Close': hideElement,
     "Add task": addContent,
@@ -57,20 +37,25 @@ function domEvents(btn) {
     'delete': [deleteElement, removeStorageItem],
     'edit': show_del_popup,
   };
-  let callName = "";
+  let btnName = "";
   if (Object.keys(obj).includes(btn.textContent)) {
-    callName = btn.textContent;
+    btnName = btn.textContent;
   }
   if (Object.keys(obj).includes(btn.className)) {
-    callName = btn.className;
+    btnName = btn.className;
   }
-
-  if (typeof obj[callName] == "object") {
-    obj[callName].forEach((doIt) => btn.addEventListener("click", doIt));
+  if (btnName == "Close") {
+    btn.addEventListener("click", () => {
+      obj[btnName](btn.parentElement.parentElement.parentElement);
+    });
+    return
+  } 
+  if (typeof obj[btnName] == "object") {
+    obj[btnName].forEach((doIt) => btn.addEventListener("click", doIt));
     return;
-
-  } else {
-    btn.addEventListener("click", obj[callName]);
+  } 
+  else {
+    btn.addEventListener("click", obj[btnName]);
     return;
   }
 }
@@ -95,22 +80,21 @@ function addProject(txt) {
 }
 
 function addContent(btn) {
-  const task = btn.srcElement.parentElement;
-  const btnParent = btn.srcElement.parentElement.className.split("-")[3];
-  const title = btn.srcElement.parentElement.children[1].value;
+  const task = btn.srcElement.parentElement.parentElement;
+  const btnParent = task.className.split("-")[3]
+  const title = task.children[1].value;
   if (btnParent == "project") {
     if (title.length > 1 && title.length < 15) {
       addProject(title);
-      hideElement(btn);
+      hideElement(task.parentElement);
     }
   }
   if (title.length > 1 && btnParent != "project" && title.length < 25) {
     newDomCard(task.children);
-    hideElement(btn);
+    hideElement(task.parentElement);
   }
 }
 function priorityColor(priority, el) {
-  console.log(priority,typeof priority)
   const colors = {
     'high': "red",
     'mid': "yellow",
@@ -151,17 +135,31 @@ function newDomCard(elChildren) {
 
   /* this avoid the card showing at the wrong place when created*/
   const selectID = document.getElementById("selected");
-  selectID.click();
+  if(selectID == null){
+    const all = document.querySelector('.all-tasks')
+    all.setAttribute('id','selected')
+    all.click();
+  }
+  else{
+    selectID.click();
+  }
 }
-
+function btn_Container(btnAddName){
+  const btnContainer = create.simple_el('div','btn-container')
+  const btnClose = create.btn_creator([], "Close");
+  const btnAdd = create.btn_creator([], btnAddName);
+  btnContainer.appendChild(btnClose)
+  btnContainer.appendChild(btnAdd)
+  return {btnContainer, btnClose, btnAdd}
+}
 function InputElsProject() {
   const allElements = [];
   create.txtInput("name", "", allElements);
-  const btnClose = create.btn_creator(allElements, "Close");
-  const btnAdd = create.btn_creator(allElements, "New project");
+  const btn = btn_Container('New project')
   const two_popUp = create.popEl("project");
   allElements.forEach((el) => two_popUp.popup_content.appendChild(el));
-  return { allElements, btnClose, btnAdd };
+  two_popUp.popup_content.appendChild(btn.btnContainer)
+  return btn;
 }
 
 function popupToEdit(e) {
@@ -175,23 +173,22 @@ function popupToEdit(e) {
       all_inputs[key].value = obj[key];
     }
   });
-
-  const btnClose = create.btn_creator(allElements, "Close");
-  const btnAdd = create.btn_creator(allElements, "Confirm");
-  btnAdd.setAttribute("id", "key-" + cardKey);
+  const btn = btn_Container('Confirm')
+  btn.btnAdd.setAttribute("id", "key-" + cardKey);
   const two_popUp = create.popEl("edit");
   allElements.forEach((el) => two_popUp.popup_content.appendChild(el));
-  return { btnClose, btnAdd };
+  two_popUp.popup_content.appendChild(btn.btnContainer)
+  return btn ;
 }
 
 function defaultCardInput() {
   const allElements = [];
   DomCardInput(allElements);
-  const btnClose = create.btn_creator(allElements, "Close");
-  const btnAdd = create.btn_creator(allElements, "Add task");
+  const btn = btn_Container('Add task')
   const two_popUp = create.popEl("card");
   allElements.forEach((el) => two_popUp.popup_content.appendChild(el));
-  return { btnClose, btnAdd, two_popUp };
+  two_popUp.popup_content.appendChild(btn.btnContainer)
+  return btn ;
 }
 
 function DomCardInput(allElements) {
@@ -224,10 +221,12 @@ function show_del_popup() {
     delPop(keyName);
     if (keyName == "edit") {
       const inputs = obj[keyName](btnClicked);
+      console.log(inputs)
       domEvents(inputs.btnClose);
       domEvents(inputs.btnAdd);
     } else {
       const inputs = obj[keyName]();
+
       domEvents(inputs.btnClose);
       domEvents(inputs.btnAdd);
     }
