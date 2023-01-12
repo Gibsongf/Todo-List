@@ -20,14 +20,19 @@ function deleteElement() {
   }
 }
 function hideElement(e) {
-  e.setAttribute(
-    "style",
-    "display: none;"
-  );
+  e.setAttribute("style", "display: none;");
+}
+
+function priorityColor(priority, el) {
+  const colors = {
+    'high': "red",
+    'mid': "yellow",
+    'low': "#0cdfd5",
+  };
+  el.setAttribute("style", "border-color:" + colors[priority]);
 }
 
 function domEvents(btn) {
-
   const obj = {
     'Close': hideElement,
     "Add task": addContent,
@@ -37,10 +42,9 @@ function domEvents(btn) {
     'edit': show_del_popup,
   };
   function checkParentEl() {
-    if (btn.parentElement.parentElement.parentElement.id == 'content') {
-      obj[btnName](btn.parentElement.parentElement)
-    }
-    else {
+    if (btn.parentElement.parentElement.parentElement.id == "content") {
+      obj[btnName](btn.parentElement.parentElement);
+    } else {
       obj[btnName](btn.parentElement.parentElement.parentElement);
     }
   }
@@ -54,13 +58,12 @@ function domEvents(btn) {
   }
   if (btnName == "Close") {
     btn.addEventListener("click", checkParentEl);
-    return
-  }
-  if (typeof obj[btnName] == "object") {
-    obj[btnName].forEach(doIt => btn.addEventListener("click", doIt));
     return;
   }
-  else {
+  if (typeof obj[btnName] == "object") {
+    obj[btnName].forEach((doIt) => btn.addEventListener("click", doIt));
+    return;
+  } else {
     btn.addEventListener("click", obj[btnName]);
     return;
   }
@@ -68,57 +71,57 @@ function domEvents(btn) {
 function clickDel() {
   const key = this.id.split("-")[1];
   const task = document.querySelector(".card-" + key);
-  const delBtn = task.children[3].children[0]
+  const delBtn = task.children[3].children[0];
   delBtn.click();
 }
 function warn_limit_project() {
   const ul_projects = document.querySelector(".list-projects");
   if (ul_projects.children.length >= 6) {
     const warning = create.popEl("warning");
-    const txt = create.simple_el('h2', '', 'Limit of projects are 5')
+    const txt = create.simple_el("h3", "", "Limit of projects are 5.");
     const btnClose = create.btn_creator([], "Close");
-    warning.popup_content.appendChild(txt)
-    warning.popup_content.appendChild(btnClose)
-    domEvents(btnClose)
-    return true
+    warning.popup_content.appendChild(txt);
+    warning.popup_content.appendChild(btnClose);
+    btnClose.setAttribute("style", "margin:0 auto");
+    domEvents(btnClose);
+    return true;
   }
 }
-function userName () {
-  const h4 = document.querySelector('.user-name').children[1]
+function userName() {
+  const h4 = document.querySelector(".user-name").children[1];
 
-  if (localStorage['user-name'] === undefined){
-    popupName ()
-  }
-  else{
-    h4.textContent = localStorage['user-name']
+  if (localStorage["user-name"] === undefined) {
+    popupName();
+  } else {
+    h4.textContent = localStorage["user-name"];
   }
 
-  
-  
-  function popupName (){
+  function popupName() {
     const allElements = [];
     const txt = create.txtInput("name", "max 10 characters", allElements);
     const btnConfirm = create.btn_creator(allElements, "Confirm");
     const two_popUp = create.popEl("user-name");
     allElements.forEach((el) => two_popUp.popup_content.appendChild(el));
-    btnConfirm.addEventListener('click',confirmName)
-    function confirmName(){
-      const promptName = document.querySelector('.pop-up-user-name')
-      if (txt.value.length <= 10 && txt.value.length > 2){
-        let name = txt.value
-        name = name[0].toUpperCase() + name.slice(1)
-        h4.textContent = name
+    btnConfirm.addEventListener("click", confirmName);
+    btnConfirm.setAttribute("style", "margin:0 auto");
+
+    function confirmName() {
+      const promptName = document.querySelector(".pop-up-user-name");
+      if (txt.value.length <= 10 && txt.value.length > 2) {
+        let name = txt.value;
+        name = name[0].toUpperCase() + name.slice(1);
+        h4.textContent = name;
         hideElement(promptName);
-        localStorage['user-name'] = name
-      }   
+        localStorage["user-name"] = name;
+      }
     }
   }
 }
 
 function addProject(txt) {
-  const limit = warn_limit_project()
+  const limit = warn_limit_project();
   if (limit == true) {
-    return
+    return;
   }
   const ul_projects = document.querySelector(".list-projects");
   const li = document.createElement("li");
@@ -126,7 +129,6 @@ function addProject(txt) {
 
   li.appendChild(div);
   ul_projects.appendChild(li);
-
   updateProjectStorage();
 
   const btnDel = create.btnDel(true);
@@ -136,7 +138,7 @@ function addProject(txt) {
 
 function addContent(btn) {
   const task = btn.srcElement.parentElement.parentElement;
-  const btnParent = task.className.split("-")[3]
+  const btnParent = task.className.split("-")[3];
   const title = task.children[1].value;
   if (btnParent == "project") {
     if (title.length > 1 && title.length < 15) {
@@ -145,30 +147,22 @@ function addContent(btn) {
     }
   }
   if (title.length > 1 && btnParent != "project" && title.length < 15) {
-    newDomCard(task.children);
+    createTaskDom(task.children);
     hideElement(task.parentElement);
   }
 }
-function priorityColor(priority, el) {
-  const colors = {
-    'high': "red",
-    'mid': "yellow",
-    'low': "#0cdfd5",
-  };
-  el.setAttribute("style", "border-color:" + colors[priority]);
-}
-function newDomCard(elChildren) {
+
+function createTaskDom(elChildren) {
   const card_input = document.querySelector(".card-input");
   const container = document.querySelector(".card-container");
   const card = document.createElement("div");
   let all_el = handleContent(elChildren);
   card.className = "card-" + all_el["storageKey"];
-  card.setAttribute('id', 'task-holder')
+  card.setAttribute("id", "task-holder");
   const els_info = [
     ["h2", "title", all_el["title"]],
     ["h3", "dueDate", all_el["dueDate"]],
     ["h3", "description", all_el["description"]],
-
   ];
 
   els_info.forEach((item) => {
@@ -181,9 +175,9 @@ function newDomCard(elChildren) {
   }
   const btnDel = create.btnDel();
   const btnEdit = create.btnEdit();
-  const btn = create.simple_el('div', 'btn-card-container');
-  btn.appendChild(btnDel)
-  btn.appendChild(btnEdit)
+  const btn = create.simple_el("div", "btn-card-container");
+  btn.appendChild(btnDel);
+  btn.appendChild(btnEdit);
   card.appendChild(btn);
   priorityColor(all_el["priority"], card);
   container.appendChild(card);
@@ -193,36 +187,36 @@ function newDomCard(elChildren) {
   /* this avoid the card showing at the wrong place when created*/
   const selectID = document.getElementById("selected");
   if (selectID == null) {
-    const all = document.querySelector('.all-tasks')
-    all.setAttribute('id', 'selected')
+    const all = document.querySelector(".all-tasks");
+    all.setAttribute("id", "selected");
     all.click();
-  }
-  else {
+  } else {
     selectID.click();
   }
 }
 function btn_Container(btnAddName) {
-  const btnContainer = create.simple_el('div', 'btn-container')
+  const btnContainer = create.simple_el("div", "btn-container");
   const btnClose = create.btn_creator([], "Close");
   const btnAdd = create.btn_creator([], btnAddName);
-  btnContainer.appendChild(btnClose)
-  btnContainer.appendChild(btnAdd)
-  return { btnContainer, btnClose, btnAdd }
+  btnContainer.appendChild(btnClose);
+  btnContainer.appendChild(btnAdd);
+  return { btnContainer, btnClose, btnAdd };
 }
-function InputElsProject() {
+
+function showProjectForm() {
   const allElements = [];
   create.txtInput("name", "", allElements);
-  const btn = btn_Container('New project')
+  const btn = btn_Container("New project");
   const two_popUp = create.popEl("project");
   allElements.forEach((el) => two_popUp.popup_content.appendChild(el));
-  two_popUp.popup_content.appendChild(btn.btnContainer)
+  two_popUp.popup_content.appendChild(btn.btnContainer);
   return btn;
 }
 
-function popupToEdit(e) {
-  const cardKey = e.parentElement.parentElement.className.split('-')[1];
+function showEditForm(e) {
+  const cardKey = e.parentElement.parentElement.className.split("-")[1];
   const allElements = [];
-  const all_inputs = DomCardInput(allElements);
+  const all_inputs = taskInputs(allElements);
   const obj = JSON.parse(localStorage[cardKey]);
 
   Object.keys(obj).forEach((key) => {
@@ -230,26 +224,30 @@ function popupToEdit(e) {
       all_inputs[key].value = obj[key];
     }
   });
-  const btn = btn_Container('Confirm')
+  const btn = btn_Container("Confirm");
   btn.btnAdd.setAttribute("id", "key-" + cardKey);
   const two_popUp = create.popEl("edit");
   allElements.forEach((el) => two_popUp.popup_content.appendChild(el));
-  two_popUp.popup_content.appendChild(btn.btnContainer)
+  two_popUp.popup_content.appendChild(btn.btnContainer);
   return btn;
 }
 
-function defaultCardInput() {
+function showTaskForm() {
   const allElements = [];
-  DomCardInput(allElements);
-  const btn = btn_Container('Add task')
+  taskInputs(allElements);
+  const btn = btn_Container("Add task");
   const two_popUp = create.popEl("card");
   allElements.forEach((el) => two_popUp.popup_content.appendChild(el));
-  two_popUp.popup_content.appendChild(btn.btnContainer)
+  two_popUp.popup_content.appendChild(btn.btnContainer);
   return btn;
 }
 
-function DomCardInput(allElements) {
-  const title = create.txtInput("title", "min 2 characters, max 15", allElements);
+function taskInputs(allElements) {
+  const title = create.txtInput(
+    "title",
+    "min 2 characters, max 15",
+    allElements
+  );
   const description = create.txtInput(
     "description",
     "min 2 characters",
@@ -270,9 +268,9 @@ function show_del_popup() {
     keyName = keyName[0];
   }
   const obj = {
-    edit: popupToEdit,
-    project: InputElsProject,
-    task: defaultCardInput,
+    edit: showEditForm,
+    project: showProjectForm,
+    task: showTaskForm,
   };
   function showPop() {
     delPop(keyName);
@@ -300,5 +298,4 @@ function show_del_popup() {
   showPop();
 }
 
-
-export { newDomCard, addProject, show_del_popup, userName };
+export { createTaskDom, addProject, show_del_popup, userName };

@@ -1,13 +1,11 @@
-import delSrcBlack from '/src/imgs/delete.png'
-import delSrcWhite from '/src/imgs/delete-white.png'
-
-import editSrc from '/src/imgs/edit.png'
-
+import delSrcBlack from "/src/imgs/delete.png";
+import delSrcWhite from "/src/imgs/delete-white.png";
+import editSrc from "/src/imgs/edit.png";
 
 function createEl() {
   const { format } = require("date-fns");
   const currentDate = format(new Date(), "MM-dd-yyyy");
-  
+
   function dateInput(arr) {
     const label = htmlLabel("dueDate");
     const input = document.createElement("input");
@@ -23,7 +21,7 @@ function createEl() {
     const label = document.createElement("label");
     let newName = contentName[0].toUpperCase() + contentName.slice(1);
     if (contentName == "title" || contentName == "name") {
-      newName = '* '+newName
+      newName = "* " + newName;
     }
     label.textContent = newName + ":";
     label.htmlFor = contentName.toLowerCase();
@@ -36,7 +34,7 @@ function createEl() {
     name = name.replace(" ", "-").toLowerCase();
     input.setAttribute("id", name);
 
-    if(pHolder.length > 1){
+    if (pHolder.length > 1) {
       input.placeholder = pHolder;
     }
     if (name == "title" || name == "name") {
@@ -67,8 +65,7 @@ function createEl() {
     arr.push(input);
     return input;
   }
-  
-  
+
   function projectsSelector(arr) {
     const label = htmlLabel("Projects");
     const input = document.createElement("select");
@@ -86,31 +83,30 @@ function createEl() {
     const btnClose = document.createElement("button");
     const idName = txt.replace(txt[0], txt[0].toLowerCase());
     btnClose.textContent = txt;
-    btnClose.className = idName ;
+    btnClose.className = idName;
     arr.push(btnClose);
     return btnClose;
   }
-  
-  function btnImg (src,nameCl,nameID){
-    const img = document.createElement('input');
-    img.type = 'image'
-    img.src = src
-    img.className = nameCl
-    img.setAttribute('id',nameID)
-    return img
+
+  function btnImg(src, nameCl, nameID) {
+    const img = document.createElement("input");
+    img.type = "image";
+    img.src = src;
+    img.className = nameCl;
+    img.setAttribute("id", nameID);
+    return img;
   }
 
-  function btnEdit (){
-    return btnImg(editSrc,'edit','btn-img')
+  function btnEdit() {
+    return btnImg(editSrc, "edit", "btn-img");
   }
 
-  function btnDel (color){
-    if(color){
-      return btnImg(delSrcWhite,'delete','btn-img')
+  function btnDel(color) {
+    if (color) {
+      return btnImg(delSrcWhite, "delete", "btn-img");
     }
-    return btnImg(delSrcBlack,'delete','btn-img')
+    return btnImg(delSrcBlack, "delete", "btn-img");
   }
-  
 
   function simple_el(type, selector_name, innerContent) {
     const ell = document.createElement(type);
@@ -126,12 +122,10 @@ function createEl() {
     const popup_content = simple_el("div", "pop-up-content-" + name);
     content.appendChild(popup);
     popup.appendChild(popup_content);
-    popup.setAttribute('id','pop-up')
-    popup_content.setAttribute('id','pop-up-content')
-    return {popup,popup_content};
+    popup.setAttribute("id", "pop-up");
+    popup_content.setAttribute("id", "pop-up-content");
+    return { popup, popup_content };
   }
-
-  
 
   const everything = {
     simple_el,
@@ -144,7 +138,7 @@ function createEl() {
     dateInput,
     projectsSelector,
     btnDel,
-    btnEdit
+    btnEdit,
   };
   return Object.assign({}, everything);
 }

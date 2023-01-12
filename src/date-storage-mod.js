@@ -28,7 +28,6 @@ function objNext7Days() {
     let ad = addDays(parseISO(currentDay), n);
     let arr_date = format(new Date(ad), "yyyy-MM-dd EEEE").split(" ");
     dateDict[arr_date[0]] = arr_date[1];
-
   }
   let weekDaysKeys = Object.keys(dateDict);
   dateDict[weekDaysKeys[0]] = "Today";
@@ -45,8 +44,8 @@ function checkWeekDayName(taskDate) {
   if (objs.weekDaysKeys.includes(taskDate)) {
     return objs.dateDict[taskDate];
   } else {
-    let arr = String(parseISO(taskDate)).split(' ').slice(1,4)
-    return arr.join('/');
+    let arr = String(parseISO(taskDate)).split(" ").slice(1, 4);
+    return arr.join("/");
   }
 }
 function todayDate() {
@@ -125,11 +124,16 @@ function removeStorageItem() {
     localStorage["projects"] = indx;
     return;
   }
-  const itemKey = this.parentElement.parentElement.className.replace("card-", "");
+  const itemKey = this.parentElement.parentElement.className.replace(
+    "card-",
+    ""
+  );
   localStorage.removeItem(itemKey);
 }
 function updateProjectStorage() {
-  const projects = Array.from(document.querySelector(".list-projects").children).slice(1);
+  const projects = Array.from(
+    document.querySelector(".list-projects").children
+  ).slice(1);
   const arr_proj = [];
   projects.forEach((p) => {
     arr_proj.push(p.children[0].textContent);
@@ -138,4 +142,11 @@ function updateProjectStorage() {
   localStorage["projects"] = arr_proj;
 }
 
-export { handleContent, updateProjectStorage, objNext7Days, validDate, removeStorageItem, elementToObj };
+export {
+  handleContent,
+  updateProjectStorage,
+  objNext7Days,
+  validDate,
+  removeStorageItem,
+  elementToObj,
+};

@@ -1,5 +1,10 @@
 import "./style.css";
-import { newDomCard, addProject, show_del_popup, userName } from "/src/dom.js";
+import {
+  createTaskDom,
+  addProject,
+  show_del_popup,
+  userName,
+} from "/src/dom.js";
 import { objNext7Days, validDate } from "/src/date-storage-mod.js";
 
 function showEl(item) {
@@ -38,7 +43,7 @@ function allTask() {
     if (isDue == true) {
       item["dueDate"] = "Past Task";
     }
-    newDomCard(item);
+    createTaskDom(item);
   });
 }
 
@@ -125,7 +130,7 @@ function btnActive() {
 
 sideBarProjects();
 allTask();
-userName()
+userName();
 
 const addTask = document.querySelector(".add-task");
 addTask.addEventListener("click", show_del_popup);
@@ -133,13 +138,12 @@ addTask.addEventListener("click", show_del_popup);
 const adProject = document.querySelector(".add-project");
 adProject.addEventListener("click", show_del_popup);
 
-const menu = Array.from(document.querySelector('.menu').children)
-menu.forEach(i => i.addEventListener("click", btnActive))
+const menu = Array.from(document.querySelector(".menu").children);
+menu.forEach((i) => i.addEventListener("click", btnActive));
 
-const projects = Array.from(document.querySelector(".list-projects").children).slice(1);
+const projects = Array.from(
+  document.querySelector(".list-projects").children
+).slice(1);
 projects.forEach((p) => p.addEventListener("click", btnActive));
 
-
 export { btnActive };
-
-
