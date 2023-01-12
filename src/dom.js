@@ -1,4 +1,3 @@
-import "./style.css";
 import createEl from "/src/createElements.js";
 import {
   handleContent,
