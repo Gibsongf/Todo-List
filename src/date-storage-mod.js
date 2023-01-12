@@ -42,11 +42,11 @@ function checkWeekDayName(taskDate) {
     taskDate = todayDate();
   }
   const objs = objNext7Days();
-
   if (objs.weekDaysKeys.includes(taskDate)) {
     return objs.dateDict[taskDate];
   } else {
-    return taskDate;
+    let arr = String(parseISO(taskDate)).split(' ').slice(1,4)
+    return arr.join('/');
   }
 }
 function todayDate() {

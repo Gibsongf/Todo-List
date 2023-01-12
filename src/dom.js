@@ -83,6 +83,37 @@ function warn_limit_project() {
     return true
   }
 }
+function userName () {
+  const h4 = document.querySelector('.user-name').children[1]
+
+  if (localStorage['user-name'] === undefined){
+    popupName ()
+  }
+  else{
+    h4.textContent = localStorage['user-name']
+  }
+
+  
+  
+  function popupName (){
+    const allElements = [];
+    const txt = create.txtInput("name", "max 10 characters", allElements);
+    const btnConfirm = create.btn_creator(allElements, "Confirm");
+    const two_popUp = create.popEl("user-name");
+    allElements.forEach((el) => two_popUp.popup_content.appendChild(el));
+    btnConfirm.addEventListener('click',confirmName)
+    function confirmName(){
+      const promptName = document.querySelector('.pop-up-user-name')
+      if (txt.value.length <= 10 && txt.value.length > 2){
+        let name = txt.value
+        name = name[0].toUpperCase() + name.slice(1)
+        h4.textContent = name
+        hideElement(promptName);
+        localStorage['user-name'] = name
+      }   
+    }
+  }
+}
 
 function addProject(txt) {
   const limit = warn_limit_project()
@@ -218,7 +249,7 @@ function defaultCardInput() {
 }
 
 function DomCardInput(allElements) {
-  const title = create.txtInput("title", "min 2 characters", allElements);
+  const title = create.txtInput("title", "min 2 characters, max 15", allElements);
   const description = create.txtInput(
     "description",
     "min 2 characters",
@@ -270,4 +301,4 @@ function show_del_popup() {
 }
 
 
-export { newDomCard, addProject, show_del_popup };
+export { newDomCard, addProject, show_del_popup, userName };

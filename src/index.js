@@ -1,5 +1,5 @@
 import "./style.css";
-import { newDomCard, addProject, show_del_popup } from "/src/dom.js";
+import { newDomCard, addProject, show_del_popup, userName } from "/src/dom.js";
 import { objNext7Days, validDate } from "/src/date-storage-mod.js";
 
 function showEl(item) {
@@ -85,11 +85,7 @@ function showTodayTask() {
 function getAllTask() {
   let allObjTasks = [];
   for (let i of Object.keys(localStorage)) {
-    if (
-      i != "IsThisFirstTime_Log_From_LiveServer" &&
-      i != "objKey" &&
-      i != "projects"
-    ) {
+    if (Number(i)) {
       let obj = localStorage.getItem(i);
       allObjTasks.push(JSON.parse(obj));
     }
@@ -129,7 +125,7 @@ function btnActive() {
 
 sideBarProjects();
 allTask();
-
+userName()
 
 const addTask = document.querySelector(".add-task");
 addTask.addEventListener("click", show_del_popup);
