@@ -1,2 +1,3 @@
 # a simple Todo-List
-Part of the [Odin Project](https://www.theodinproject.com/) curriculum
+Part of the [Odin Project](https://www.theodinproject.com/) curriculum <br>
+[Live preview](https://gibsongf.github.io/Todo-List/)
