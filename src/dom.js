@@ -207,7 +207,7 @@ function btn_Container(btnAddName) {
   return { btnContainer, btnClose, btnAdd };
 }
 
-function showProjectForm() {
+function showProjectInput() {
   const allElements = [];
   create.txtInput("name", "", allElements);
   const btn = btn_Container("New project");
@@ -217,7 +217,7 @@ function showProjectForm() {
   return btn;
 }
 
-function showEditForm(e) {
+function showEditInput(e) {
   const cardKey = e.parentElement.parentElement.className.split("-")[1];
   const allElements = [];
   const all_inputs = taskInputs(allElements);
@@ -236,7 +236,7 @@ function showEditForm(e) {
   return btn;
 }
 
-function showTaskForm() {
+function showTaskInput() {
   const allElements = [];
   taskInputs(allElements);
   const btn = btn_Container("Add task");
@@ -264,31 +264,7 @@ function taskInputs(allElements) {
 }
 
 function show_del_popup() {
-  const btnClicked = this;
-  let keyName = this.className.split("-");
-  if (keyName.length > 1) {
-    keyName = keyName[1];
-  } else {
-    keyName = keyName[0];
-  }
-  const obj = {
-    edit: showEditForm,
-    project: showProjectForm,
-    task: showTaskForm,
-  };
-  function showPop() {
-    delPop(keyName);
-    if (keyName == "edit") {
-      const inputs = obj[keyName](btnClicked);
-      domEvents(inputs.btnClose);
-      domEvents(inputs.btnAdd);
-    } else {
-      const inputs = obj[keyName]();
 
-      domEvents(inputs.btnClose);
-      domEvents(inputs.btnAdd);
-    }
-  }
   function delPop(popName) {
     if (popName == "task") {
       popName = "card";
@@ -299,7 +275,33 @@ function show_del_popup() {
       hasPop.parentElement.removeChild(hasPop);
     }
   }
-  showPop();
+  function btnEvt(btn){
+    domEvents(btn.btnClose);
+    domEvents(btn.btnAdd);
+  } 
+
+  const btnClicked = this;
+  let keyName = this.className.split("-");
+  if (keyName.length > 1) {
+    keyName = keyName[1];
+  } else {
+    keyName = keyName[0];
+  }
+  const obj = {
+    edit: showEditInput,
+    project: showProjectInput,
+    task: showTaskInput,
+  };
+
+  delPop(keyName)
+  if (keyName == "edit") {
+    const inputs = obj[keyName](btnClicked);
+    btnEvt(inputs)
+  } else {
+    const inputs = obj[keyName]();
+    btnEvt(inputs)  
+  }
+    
 }
 
 export { createTaskDom, addProject, show_del_popup, userName };
