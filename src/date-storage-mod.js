@@ -3,18 +3,18 @@ import { btnActive } from "/src/index.js";
 
 function validDate(userDate, fromStorage) {
   const result = isBefore(parseISO(userDate), parseISO(todayDate()));
-  if (fromStorage == true) {
-    if (result == true) {
+  if (fromStorage === true) {
+    if (result === true) {
       return true;
     }
-    if (result == false) {
+    if (result === false) {
       return userDate;
     }
   }
-  if (result == true) {
+  if (result === true) {
     return todayDate();
   }
-  if (result == false) {
+  if (result === false) {
     return userDate;
   }
 }
@@ -36,10 +36,7 @@ function objNext7Days() {
 }
 
 function checkWeekDayName(taskDate) {
-  taskDate = validDate(taskDate);
-  if (typeof taskDate == "undefined") {
-    taskDate = todayDate();
-  }
+  taskDate = validDate(taskDate); 
   const objs = objNext7Days();
   if (objs.weekDaysKeys.includes(taskDate)) {
     return objs.dateDict[taskDate];
@@ -91,13 +88,13 @@ function createKey_storeContent(contentObj) {
 
 function storeTask(contentObj, storeContent) {
   if (contentObj["dueDate"].length > 1) {
-    if (storeContent == true) {
+    if (storeContent === true) {
       createKey_storeContent(contentObj);
     }
     contentObj["dueDate"] = checkWeekDayName(contentObj["dueDate"]);
   } else {
     contentObj["dueDate"] = todayDate();
-    if (storeContent == true) {
+    if (storeContent === true) {
       createKey_storeContent(contentObj);
       storeTask(contentObj);
     }
@@ -107,7 +104,7 @@ function storeTask(contentObj, storeContent) {
 function handleContent(lst) {
   let obj = elementToObj(lst);
 
-  if (lst["stored"] == true) {
+  if (lst["stored"] === true) {
     storeTask(lst);
     return lst;
   }

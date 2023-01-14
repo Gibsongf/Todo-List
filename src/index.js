@@ -40,7 +40,7 @@ function allTask() {
   const allObjTasks = getAllTask();
   allObjTasks.forEach((item) => {
     let isDue = validDate(item["dueDate"], true);
-    if (isDue == true) {
+    if (isDue === true) {
       item["dueDate"] = "Past Task";
     }
     createTaskDom(item);

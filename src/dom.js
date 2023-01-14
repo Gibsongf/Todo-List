@@ -41,6 +41,8 @@ function domEvents(btn) {
     'delete': [deleteElement, removeStorageItem],
     'edit': show_del_popup,
   };
+  let btnName = "";
+  
   function checkParentEl() {
     if (btn.parentElement.parentElement.parentElement.id == "content") {
       obj[btnName](btn.parentElement.parentElement);
@@ -49,7 +51,6 @@ function domEvents(btn) {
     }
   }
 
-  let btnName = "";
   if (Object.keys(obj).includes(btn.textContent)) {
     btnName = btn.textContent;
   }
@@ -151,14 +152,25 @@ function addContent(btn) {
     hideElement(task.parentElement);
   }
 }
+function clickSelectedId(){
 
+  /* this avoid the card showing at the wrong place when created*/
+  const selectID = document.getElementById("selected");
+  if (selectID == null) {
+    const all = document.querySelector(".all-tasks");
+    all.setAttribute("id", "selected");
+    all.click();
+  } else {
+    selectID.click();
+  }
+}
 function createTaskDom(elChildren) {
   const card_input = document.querySelector(".card-input");
   const container = document.querySelector(".card-container");
-  const card = document.createElement("div");
   let all_el = handleContent(elChildren);
-  card.className = "card-" + all_el["storageKey"];
+  const card = create.simple_el("div","card-" + all_el["storageKey"]);
   card.setAttribute("id", "task-holder");
+  
   const els_info = [
     ["h2", "title", all_el["title"]],
     ["h3", "dueDate", all_el["dueDate"]],
@@ -183,17 +195,9 @@ function createTaskDom(elChildren) {
   container.appendChild(card);
   domEvents(btnDel);
   domEvents(btnEdit);
-
-  /* this avoid the card showing at the wrong place when created*/
-  const selectID = document.getElementById("selected");
-  if (selectID == null) {
-    const all = document.querySelector(".all-tasks");
-    all.setAttribute("id", "selected");
-    all.click();
-  } else {
-    selectID.click();
-  }
+  clickSelectedId()
 }
+
 function btn_Container(btnAddName) {
   const btnContainer = create.simple_el("div", "btn-container");
   const btnClose = create.btn_creator([], "Close");
