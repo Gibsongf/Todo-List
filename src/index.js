@@ -1,12 +1,7 @@
 import "./style.css";
-import {
-  createTaskDom,
-  addProject,
-  show_del_popup,
-  userName,
-} from "/src/dom.js";
+import { createTaskDom, addProject} from "/src/dom.js";
 import { objNext7Days, validDate } from "/src/date-storage-mod.js";
-
+import {show_del_popup, askUserName} from '/src/pop-ups.js'
 function showEl(item) {
   const toShow = document.querySelector(".card-" + item["storageKey"]);
   toShow.setAttribute("style", "display:block");
@@ -49,9 +44,9 @@ function allTask() {
 
 function priorityColor(priority, el) {
   const colors = {
-    'high': "red",
-    'mid': "yellow",
-    'low': "#0cdfd5",
+    high: "red",
+    mid: "yellow",
+    low: "#0cdfd5",
   };
   el.setAttribute("style", "border-color:" + colors[priority]);
 }
@@ -90,7 +85,7 @@ function showTodayTask() {
 function getAllTask() {
   let allObjTasks = [];
   for (let i of Object.keys(localStorage)) {
-    if (Number(i)) {
+    if (Number(i) >= 0) {/* 0 was not showing without >= 0 */
       let obj = localStorage.getItem(i);
       allObjTasks.push(JSON.parse(obj));
     }
@@ -117,7 +112,7 @@ function btnActive() {
   this.setAttribute("id", "selected");
 
   const obj = {
-    'Today': showTodayTask,
+    Today: showTodayTask,
     "Next 7 Days": showNext7Days,
     "All Tasks": showAllTask,
   };
@@ -130,7 +125,7 @@ function btnActive() {
 
 sideBarProjects();
 allTask();
-userName();
+askUserName();
 
 const addTask = document.querySelector(".add-task");
 addTask.addEventListener("click", show_del_popup);
