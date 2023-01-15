@@ -3,7 +3,7 @@ import {
   handleContent,
   removeStorageItem,
   updateProjectStorage,
-} from "/src/date-storage-mod.js";
+} from "/src/date-storage.js";
 import { show_del_popup } from "/src/pop-ups.js";
 
 const create = createEl();

@@ -1,6 +1,6 @@
 import "./style.css";
 import { createTaskDom, addProject} from "/src/dom.js";
-import { objNext7Days, validDate } from "/src/date-storage-mod.js";
+import { objNext7Days, validDate } from "/src/date-storage.js";
 import {show_del_popup, askUserName} from '/src/pop-ups.js'
 function showEl(item) {
   const toShow = document.querySelector(".card-" + item["storageKey"]);
