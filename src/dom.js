@@ -3,7 +3,7 @@ import {
   handleContent,
   removeStorageItem,
   updateProjectStorage,
-} from "/src/date-storage-mod.js";
+} from "/src/date-storage.js";
 const create = createEl();
 
 function deleteElement() {

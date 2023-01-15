@@ -5,7 +5,7 @@ import {
   show_del_popup,
   userName,
 } from "/src/dom.js";
-import { objNext7Days, validDate } from "/src/date-storage-mod.js";
+import { objNext7Days, validDate } from "/src/date-storage.js";
 
 function showEl(item) {
   const toShow = document.querySelector(".card-" + item["storageKey"]);
