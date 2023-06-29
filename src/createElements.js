@@ -140,6 +140,6 @@ function createEl() {
     btnDel,
     btnEdit,
   };
-  return Object.assign({}, everything);
+  return everything;
 }
 export default createEl;
